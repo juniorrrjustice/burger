@@ -1,0 +1,3083 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAUGET | Good Food. Great Mood. Delivered.</title>
+    
+    <!-- Fonts: Sora (Headings) & Inter (Body & UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fauget: {
+                            dark: '#2A1710',
+                            secondary: '#3A2116',
+                            cream: '#FFF8EE',
+                            softCream: '#EBD8C5',
+                            caramel: '#B85C38',
+                            darkCaramel: '#874127',
+                            orange: '#D96B3F',
+                            gold: '#F1C75B',
+                            muted: '#9C8374',
+                            sage: '#7D8C63',
+                            peach: '#E5A36A'
+                        }
+                    },
+                    fontFamily: {
+                        sora: ['Sora', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Warm restaurant-style visual system */
+        :root {
+            --product-x: 58%;
+            --product-y: 82%;
+            --product-size: 220px;
+            --burger-scale: 1.0;
+            --pizza-scale: 0.96;
+            --milkshake-scale: 0.88;
+        }
+
+        @media (max-width: 1023px) {
+            :root {
+                --product-x: 58%;
+                --product-y: 78%;
+                --product-size: 200px;
+            }
+        }
+
+        @media (max-width: 639px) {
+            :root {
+                --product-x: 56%;
+                --product-y: 73%;
+                --product-size: 165px;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2A1710;
+            color: #FFF8EE;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Sora', sans-serif;
+        }
+
+        .hero-bg-glow {
+            background:
+                radial-gradient(circle at 78% 62%, rgba(217, 107, 63, 0.20) 0%, rgba(58, 33, 22, 0.25) 34%, transparent 60%),
+                linear-gradient(120deg, #2A1710 0%, #2F1A12 56%, #20110C 100%);
+        }
+
+        .hero-food-spotlight {
+            position: absolute;
+            width: 76%;
+            height: 46%;
+            right: 4%;
+            bottom: 7%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(241, 199, 91, 0.16) 0%, rgba(217, 107, 63, 0.11) 42%, rgba(42, 23, 16, 0) 72%);
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-person-wrap {
+            transform: translateX(-18px);
+        }
+
+        .hero-product-anchor {
+            position: absolute;
+            top: var(--product-y);
+            left: var(--product-x);
+            transform: translate(-50%, -100%);
+            width: var(--product-size);
+            height: var(--product-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .hero-product-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.32s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s ease;
+            transform: scale(var(--product-scale, 1));
+            filter: drop-shadow(0 20px 26px rgba(0,0,0,0.45));
+            opacity: 1;
+            will-change: opacity, transform;
+        }
+
+        .hero-product-img.switching {
+            opacity: 0;
+            transform: scale(calc(var(--product-scale, 1) * 0.86)) translateY(16px);
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.10));
+        }
+
+        .hero-product-label {
+            position: absolute;
+            top: 52%;
+            left: 28%;
+            z-index: 24;
+            pointer-events: none;
+        }
+
+        .hero-typing-line {
+            display: inline-flex;
+            align-items: baseline;
+            min-height: 1.15em;
+        }
+
+        .hero-typing-caret {
+            display: inline-block;
+            width: 3px;
+            height: 0.92em;
+            margin-left: 0.14em;
+            border-radius: 999px;
+            background: currentColor;
+            animation: typingCaret 0.78s steps(1) infinite;
+            vertical-align: -0.08em;
+        }
+
+        @keyframes typingCaret {
+            50% { opacity: 0; }
+        }
+
+        /* Warm editorial cards instead of glassmorphism */
+        .glass-card {
+            background: rgba(58, 33, 22, 0.72);
+            border: 1px solid rgba(235, 216, 197, 0.10);
+            box-shadow: 0 18px 40px rgba(24, 10, 5, 0.14);
+        }
+
+        .glass-card-hover {
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-3px);
+            border-color: rgba(217, 107, 63, 0.35);
+            box-shadow: 0 16px 34px rgba(24, 10, 5, 0.22);
+        }
+
+        /* Mobile hero: let the food/person visual use the full row without becoming oversized */
+        @media (max-width: 639px) {
+            .hero-bg-glow {
+                min-height: auto !important;
+                padding-top: 2.25rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+
+            .hero-bg-glow > .max-w-7xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            #view-home .grid {
+                gap: 1.25rem;
+            }
+
+            #view-home .lg\:col-span-6 {
+                width: 100%;
+            }
+
+            #hero-person-wrapper {
+                width: 100%;
+                max-width: none !important;
+                height: 265px;
+                aspect-ratio: auto;
+                transform: none;
+                margin: 0;
+            }
+
+            .hero-person-wrap {
+                transform: none;
+            }
+
+            .hero-product-anchor {
+                width: 125px;
+                height: 125px;
+                left: 50%;
+                top: 80%;
+            }
+
+            .hero-product-img {
+                filter: drop-shadow(0 12px 18px rgba(0,0,0,.38));
+            }
+
+            .hero-food-spotlight {
+                width: 95%;
+                height: 64%;
+                right: 2.5%;
+                bottom: 0;
+            }
+
+            /* Keep the person centered and comfortably inside the mobile row */
+            #hero-person-wrapper > img:not(#hero-product-img) {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center bottom;
+            }
+
+            #hero-person-wrapper > div.absolute.bottom-4 {
+                bottom: 0.5rem;
+            }
+
+            /* Full-width mobile control strip */
+            #hero-person-wrapper > div.absolute.bottom-4 {
+                transform: translateX(-50%) scale(.92);
+                transform-origin: center bottom;
+            }
+
+            /* Slightly tighter mobile copy so the visual gets more room */
+            #view-home h1 {
+                font-size: clamp(2rem, 10vw, 3rem);
+                line-height: 1.06;
+            }
+
+            #view-home .text-base.sm\:text-lg {
+                font-size: .96rem;
+                line-height: 1.6;
+            }
+        }
+
+
+        /* =========================================================
+           HERO LAYOUT REFINEMENT
+           Desktop: controlled two-column composition.
+           Mobile: full-width visual band with balanced side margins.
+           ========================================================= */
+        .hero-visual-col { min-width: 0; }
+
+        @media (min-width: 1024px) {
+            #view-home > section.hero-bg-glow {
+                min-height: calc(100vh - 5rem);
+                padding-top: 3.5rem;
+                padding-bottom: 3.5rem;
+            }
+
+            #view-home > section.hero-bg-glow > .max-w-7xl {
+                max-width: 1380px;
+            }
+
+            .hero-visual-col { margin-left: 0 !important; }
+
+            #hero-person-wrapper {
+                width: 100%;
+                max-width: 660px;
+                height: 560px;
+                aspect-ratio: auto;
+                margin-left: auto;
+                margin-right: 0;
+                transform: none;
+                isolation: isolate;
+            }
+
+            #hero-person-wrapper > img:not(#hero-product-img) {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: 62% bottom;
+                transform: translateX(2%);
+            }
+
+            .hero-product-anchor {
+                left: 40%;
+                top: 78%;
+                width: 180px;
+                height: 180px;
+                transform: translate(-50%, -100%);
+            }
+
+            .hero-product-img {
+                filter: drop-shadow(0 16px 22px rgba(0,0,0,.42));
+            }
+
+            .hero-product-label {
+                top: 44%;
+                left: 37%;
+                transform: translateX(-4%);
+            }
+
+            #hero-person-wrapper > div.absolute.bottom-4 {
+                bottom: 1.25rem;
+                left: 45%;
+                transform: translateX(-50%);
+            }
+
+            #hero-person-wrapper > div.absolute.right-0 {
+                right: .5rem;
+                top: 44%;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            #hero-person-wrapper {
+                max-width: 700px;
+                height: 590px;
+            }
+
+            .hero-product-anchor {
+                left: 39%;
+                top: 78%;
+                width: 180px;
+                height: 180px;
+            }
+
+            .hero-product-label {
+                top: 42%;
+                left: 36%;
+            }
+        }
+
+        @media (max-width: 1023px) and (min-width: 640px) {
+            #hero-person-wrapper {
+                height: 420px;
+                max-width: 560px;
+                transform: none;
+            }
+
+            #hero-person-wrapper > img:not(#hero-product-img) {
+                object-position: 58% bottom;
+            }
+
+            .hero-product-anchor {
+                left: 43%;
+                top: 74%;
+                width: 165px;
+                height: 165px;
+            }
+        }
+
+        @media (max-width: 639px) {
+            #view-home > section.hero-bg-glow {
+                padding-top: 1.25rem !important;
+                padding-bottom: 1.25rem !important;
+            }
+
+            #view-home > section.hero-bg-glow > .max-w-7xl {
+                width: 100%;
+                max-width: none;
+                padding-left: .75rem;
+                padding-right: .75rem;
+            }
+
+            #view-home .grid { gap: 1rem; }
+
+            /* Full mobile row, but with a small consistent breathing margin. */
+            .hero-visual-col {
+                width: 100%;
+                padding: 0 .15rem;
+            }
+
+            #hero-person-wrapper {
+                width: 100%;
+                max-width: none !important;
+                height: 292px;
+                aspect-ratio: auto;
+                margin: 0 auto;
+                transform: none;
+                border-radius: 1.25rem;
+                overflow: visible;
+            }
+
+            .hero-person-wrap { transform: none; }
+
+            #hero-person-wrapper > img:not(#hero-product-img) {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: 58% bottom;
+                transform: translateX(1%);
+            }
+
+            .hero-product-anchor {
+                left: 42%;
+                top: 73%;
+                width: 118px;
+                height: 118px;
+            }
+
+            .hero-product-img {
+                filter: drop-shadow(0 10px 14px rgba(0,0,0,.34));
+            }
+
+            .hero-product-label {
+                top: 30%;
+                left: 28%;
+                transform: scale(.8);
+                transform-origin: left top;
+            }
+
+            #hero-person-wrapper > div.absolute.right-0 {
+                right: .15rem;
+                top: 40%;
+                gap: .45rem;
+            }
+
+            #hero-person-wrapper > div.absolute.right-0 .hero-thumb {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            #hero-person-wrapper > div.absolute.bottom-4 {
+                left: 50%;
+                bottom: .35rem;
+                transform: translateX(-50%) scale(.84);
+                transform-origin: center bottom;
+            }
+
+            #view-home h1 {
+                font-size: clamp(2rem, 9vw, 2.7rem);
+                line-height: 1.05;
+            }
+
+            #view-home .text-base.sm\:text-lg {
+                max-width: 100%;
+                font-size: .95rem;
+                line-height: 1.55;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2A1710;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #874127;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D96B3F;
+        }
+
+
+        /* =========================================================
+           RESTAURANT BRANDING PASS
+           Rich section-to-section color changes, softer controls,
+           and a genuinely centered mobile hero composition.
+           ========================================================= */
+        :root {
+            --brand-espresso: #2a1710;
+            --brand-cocoa: #4a281b;
+            --brand-terracotta: #b95534;
+            --brand-peach: #e5a36a;
+            --brand-cream: #fff6e9;
+            --brand-sage: #526248;
+            --brand-plum: #3d2631;
+            --brand-wine: #5b2e2b;
+        }
+
+        body {
+            background: var(--brand-espresso);
+        }
+
+        .hero-bg-glow {
+            background:
+                radial-gradient(circle at 82% 58%, rgba(229, 163, 106, 0.20) 0%, rgba(185, 85, 52, 0.10) 27%, transparent 58%),
+                radial-gradient(circle at 18% 18%, rgba(82, 98, 72, 0.10) 0%, transparent 34%),
+                linear-gradient(135deg, #2a1710 0%, #382016 53%, #24120f 100%);
+        }
+
+        .hero-food-spotlight {
+            background:
+                radial-gradient(ellipse at center, rgba(229, 163, 106, 0.22) 0%, rgba(185, 85, 52, 0.13) 42%, rgba(42, 23, 16, 0) 72%);
+        }
+
+        .hero-product-label {
+            background: none !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .hero-product-label > div:first-child {
+            gap: .55rem;
+        }
+
+        .hero-product-label > div:last-child {
+            width: 3.4rem !important;
+            margin-left: 1.05rem !important;
+            background: rgba(229, 163, 106, .55) !important;
+        }
+
+        /* Solid food-brand controls rather than futuristic glass controls. */
+        #hero-person-wrapper > div.absolute.bottom-4 {
+            background: #342016 !important;
+            border: 1px solid rgba(255, 246, 233, .16) !important;
+            box-shadow: 0 12px 24px rgba(21, 8, 4, .28) !important;
+        }
+
+        #hero-person-wrapper .hero-thumb {
+            background: #3b2318 !important;
+            border-color: rgba(255, 246, 233, .18) !important;
+            box-shadow: 0 8px 16px rgba(20, 8, 4, .18) !important;
+        }
+
+        /* Phone: center the entire food + person composition as one unit. */
+        @media (max-width: 639px) {
+            #view-home > section.hero-bg-glow {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            #view-home > section.hero-bg-glow > .max-w-7xl {
+                padding-left: .55rem !important;
+                padding-right: .55rem !important;
+            }
+
+            .hero-visual-col {
+                width: 100% !important;
+                padding: 0 !important;
+                justify-content: center !important;
+            }
+
+            #hero-person-wrapper {
+                width: min(360px, calc(100vw - 1.1rem)) !important;
+                max-width: 360px !important;
+                height: 300px !important;
+                margin: 0 auto !important;
+                left: 50%;
+                transform: translateX(-50%) !important;
+                position: relative;
+            }
+
+            #hero-person-wrapper > img:not(#hero-product-img) {
+                width: 100% !important;
+                height: 100% !important;
+                object-position: 50% bottom !important;
+                transform: none !important;
+            }
+
+            .hero-product-anchor {
+                left: 42% !important;
+                top: 74% !important;
+                width: 116px !important;
+                height: 116px !important;
+            }
+
+            #hero-person-wrapper > div.absolute.right-0 {
+                right: .1rem !important;
+            }
+
+            #hero-person-wrapper > div.absolute.bottom-4 {
+                left: 50% !important;
+                bottom: .3rem !important;
+            }
+        }
+
+        /* HERO -> bright dining-room transition */
+        #how-it-works {
+            background:
+                radial-gradient(circle at 12% 18%, rgba(185, 85, 52, .08), transparent 30%),
+                linear-gradient(180deg, #f8ead8 0%, #efd8bf 100%);
+            color: #3b261c;
+            border-top: 1px solid rgba(73, 39, 24, .08);
+        }
+
+        #how-it-works h2,
+        #how-it-works h3,
+        #how-it-works .text-fauget-cream,
+        #how-it-works .text-fauget-cream\/80,
+        #how-it-works .text-fauget-cream\/70,
+        #how-it-works .text-fauget-cream\/60 {
+            color: #3a251b !important;
+        }
+
+        #how-it-works .glass-card {
+            background: rgba(255, 249, 241, .88);
+            border-color: rgba(116, 71, 43, .12);
+            box-shadow: 0 16px 28px rgba(88, 48, 27, .10);
+        }
+
+        #how-it-works .glass-card > span {
+            color: rgba(169, 76, 42, .16) !important;
+        }
+
+        #how-it-works .text-fauget-orange {
+            color: #a94d2f !important;
+        }
+
+        #how-it-works .bg-fauget-orange\/20 {
+            background: rgba(185, 85, 52, .12) !important;
+        }
+
+        /* REVIEWS -> richer wine / cocoa section */
+        #reviews {
+            background:
+                radial-gradient(circle at 86% 14%, rgba(229, 163, 106, .10), transparent 25%),
+                linear-gradient(135deg, #5b2e2b 0%, #45251f 55%, #342018 100%) !important;
+            border-top: 0 !important;
+        }
+
+        #reviews .glass-card {
+            background: rgba(36, 18, 13, .34);
+            border-color: rgba(255, 246, 233, .13);
+        }
+
+        #reviews .text-fauget-muted {
+            color: #c6a99a !important;
+        }
+
+        /* CONTACT -> match the warm cream/caramel palette used by How It Works. */
+        #ceo-contact {
+            background:
+                radial-gradient(circle at 12% 18%, rgba(185, 85, 52, .08), transparent 30%),
+                linear-gradient(180deg, #f8ead8 0%, #efd8bf 100%) !important;
+            color: #3b261c;
+            border-top: 1px solid rgba(73, 39, 24, .08);
+        }
+
+        #ceo-contact h2,
+        #ceo-contact p,
+        #ceo-contact .text-fauget-cream,
+        #ceo-contact .text-fauget-cream\/80 {
+            color: #3a251b !important;
+        }
+
+        #ceo-contact > div > div {
+            background: rgba(255, 249, 241, .88) !important;
+            border-color: rgba(116, 71, 43, .12) !important;
+            box-shadow: 0 16px 28px rgba(88, 48, 27, .10);
+        }
+
+        #ceo-contact .bg-fauget-gold\/10 {
+            background: rgba(185, 85, 52, .10) !important;
+        }
+
+        #ceo-contact .border-fauget-gold\/30 {
+            border-color: rgba(169, 77, 47, .28) !important;
+        }
+
+        #ceo-contact .text-fauget-gold {
+            color: #a94d2f !important;
+        }
+
+        #ceo-contact a {
+            background: #6b3928 !important;
+            border-color: rgba(107, 57, 40, .25) !important;
+            color: #fff9f1 !important;
+        }
+
+        /* Dedicated pages each get a distinct warm restaurant color family. */
+        #view-order {
+            background: linear-gradient(180deg, #2d1b16 0%, #46261a 100%);
+        }
+
+        #view-about {
+            background: linear-gradient(180deg, #f2dfcb 0%, #ead0b4 100%);
+        }
+
+        #view-about h1,
+        #view-about h2,
+        #view-about h3,
+        #view-about .text-fauget-cream,
+        #view-about .text-fauget-cream\/80,
+        #view-about .text-fauget-cream\/70 {
+            color: #3a251b !important;
+        }
+
+        #view-about .glass-card {
+            background: rgba(255, 249, 241, .80);
+            border-color: rgba(116, 71, 43, .12);
+        }
+
+        #view-why {
+            background:
+                radial-gradient(circle at 88% 18%, rgba(185, 85, 52, .12), transparent 28%),
+                linear-gradient(180deg, #e7eadc 0%, #d7ddca 100%);
+        }
+
+        #view-why h1,
+        #view-why h2,
+        #view-why h3,
+        #view-why .text-fauget-cream,
+        #view-why .text-fauget-cream\/80,
+        #view-why .text-fauget-cream\/70 {
+            color: #34402f !important;
+        }
+
+        #view-why .glass-card {
+            background: rgba(255, 252, 246, .76);
+            border-color: rgba(73, 91, 62, .14);
+            box-shadow: 0 16px 30px rgba(48, 63, 41, .10);
+        }
+
+        footer {
+            background: linear-gradient(135deg, #2f1d27 0%, #24171d 100%) !important;
+        }
+
+        /* Keep iconography crisp and intentional. */
+        .fa-solid, .fa-brands {
+            line-height: 1;
+        }
+
+    
+
+        /* =========================================================
+           FAUGET EDITORIAL FOOD-BRAND REDESIGN
+           ========================================================= */
+        :root {
+            --fauget-espresso: #26150F;
+            --fauget-cocoa: #4A271C;
+            --fauget-cream: #FFF6E8;
+            --fauget-terracotta: #C95C36;
+            --fauget-tomato: #A84434;
+            --fauget-gold: #E9B94E;
+            --fauget-sage: #677155;
+            --fauget-plum: #4B2935;
+            --fauget-ink: #2B1B16;
+            --fauget-line: rgba(43, 27, 22, .15);
+        }
+
+        body { background: var(--fauget-espresso); }
+        main { background: var(--fauget-espresso); }
+
+        /* Header becomes clean and brand-led rather than glassy. */
+        header {
+            background: rgba(38, 21, 15, .93) !important;
+            border-bottom: 1px solid rgba(255, 246, 232, .10) !important;
+            backdrop-filter: blur(12px);
+        }
+        header .group:hover span:first-child { color: #F07B4F !important; }
+        header .nav-link { letter-spacing: .01em; }
+
+        .fauget-hero {
+            min-height: calc(100vh - 5rem);
+            padding: 4.5rem 0 3.5rem;
+            background:
+              radial-gradient(circle at 76% 55%, rgba(233,185,78,.12), transparent 30%),
+              radial-gradient(circle at 16% 20%, rgba(201,92,54,.12), transparent 28%),
+              linear-gradient(135deg, #24140F 0%, #3A2117 58%, #21100D 100%);
+            color: var(--fauget-cream);
+        }
+        .fauget-hero-grain {
+            position:absolute; inset:0; pointer-events:none; opacity:.055;
+            background-image: radial-gradient(rgba(255,255,255,.9) .6px, transparent .6px);
+            background-size: 10px 10px;
+            mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+        }
+        .fauget-hero-blob { position:absolute; width:22rem; height:22rem; border-radius:50%; filter:blur(45px); opacity:.22; pointer-events:none; }
+        .fauget-hero-blob-one { background:#C95C36; right:-7rem; top:18%; }
+        .fauget-hero-blob-two { background:#E9B94E; left:-9rem; bottom:-9rem; opacity:.12; }
+        .fauget-hero-grid { display:grid; grid-template-columns:minmax(0, 1.04fr) minmax(0, .96fr); gap:2.5rem; align-items:center; }
+        .fauget-hero-copy { padding: 3rem 0 2.5rem; max-width: 650px; }
+        .fauget-eyebrow { display:flex; align-items:center; gap:.6rem; text-transform:uppercase; letter-spacing:.18em; font-weight:700; font-size:.72rem; color:#E9B94E; margin-bottom:1.3rem; }
+        .fauget-eyebrow-dot { width:.45rem; height:.45rem; border-radius:50%; background:#C95C36; box-shadow:0 0 0 5px rgba(201,92,54,.08); }
+        .fauget-hero-title { margin:0; font-family:'Sora',sans-serif; font-size:clamp(3rem,6.2vw,6.4rem); line-height:.92; letter-spacing:-.055em; font-weight:800; }
+        .fauget-hero-title > span { display:block; }
+        .fauget-hero-title-accent { color:#E47A4B; margin-top:.35rem; min-height:1em; }
+        .fauget-hero-lede { max-width: 560px; margin-top:1.6rem; font-size:1.08rem; line-height:1.75; color:rgba(255,246,232,.75); }
+        .fauget-hero-actions { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:2rem; }
+        .fauget-btn { display:inline-flex; align-items:center; justify-content:center; gap:.65rem; min-height:50px; padding:0 1.25rem; border-radius:14px; font-weight:700; transition:transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease; }
+        .fauget-btn:hover { transform:translateY(-2px); }
+        .fauget-btn-primary { background:#C95C36; color:#fff; box-shadow:0 14px 28px rgba(201,92,54,.22); }
+        .fauget-btn-primary:hover { background:#DC6A41; }
+        .fauget-btn-quiet { border:1px solid rgba(255,246,232,.22); color:#FFF6E8; background:transparent; }
+        .fauget-btn-quiet:hover { background:rgba(255,246,232,.06); }
+        .fauget-btn-dark { background:#2C1A15; color:#FFF6E8; box-shadow:0 12px 24px rgba(45,24,18,.14); }
+        .fauget-btn-dark:hover { background:#3A2118; }
+        .fauget-btn-outline-dark { border:1px solid rgba(45,24,18,.2); color:#2C1A15; }
+        .fauget-btn-outline-dark:hover { background:rgba(45,24,18,.06); }
+
+        .fauget-hero-promise { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); margin-top:2.1rem; padding-top:1.15rem; border-top:1px solid rgba(255,246,232,.12); }
+        .fauget-hero-promise > div { display:flex; align-items:center; gap:.65rem; color:rgba(255,246,232,.76); font-size:.82rem; }
+        .fauget-hero-promise i { color:#E9B94E; font-size:.9rem; }
+
+        .fauget-hero-visual { display:flex; justify-content:center; position:relative; min-height:590px; }
+        .fauget-person-stage { width:min(100%, 620px); height:590px; position:relative; margin-left:auto; margin-right:0; isolation:isolate; }
+        .fauget-hero-glow { position:absolute; width:68%; height:58%; right:7%; bottom:6%; background:radial-gradient(ellipse at center, rgba(233,185,78,.24), rgba(201,92,54,.10) 42%, transparent 72%); filter:blur(2px); z-index:-1; }
+        .fauget-hero-arc { position:absolute; width:72%; height:72%; border:1px solid rgba(233,185,78,.24); border-radius:50%; right:1%; bottom:1%; transform:rotate(-8deg); z-index:-1; }
+        .fauget-person-image { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:68% bottom; z-index:2; filter:drop-shadow(0 28px 42px rgba(19,8,4,.3)); }
+        .fauget-product-callout { position:absolute; left:21%; top:28%; z-index:5; color:#FFF6E8; font-size:.9rem; font-weight:700; }
+        .fauget-product-callout-line { width:62px; height:1px; margin-left:18px; margin-top:8px; background:rgba(233,185,78,.55); }
+        .fauget-hero-product-nav { position:absolute; left:10%; bottom:5%; display:flex; align-items:center; gap:1.2rem; z-index:6; padding-bottom:.4rem; border-bottom:1px solid rgba(255,246,232,.16); }
+        .fauget-product-tab { display:flex; align-items:center; gap:.42rem; color:rgba(255,246,232,.58); background:none !important; border:0 !important; box-shadow:none !important; width:auto !important; height:auto !important; padding:.25rem 0 !important; transition:color .2s ease; }
+        .fauget-product-tab:hover, .fauget-product-tab.is-active { color:#E9B94E !important; transform:none !important; }
+        .fauget-product-tab span { font-size:.77rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+        .fauget-product-tab i { font-size:.9rem; }
+        .fauget-product-next { border:0; background:transparent; color:#E9B94E; padding:.2rem 0; }
+        .fauget-product-next:hover { color:#fff; }
+        .fauget-scroll-mark { position:absolute; bottom:1.25rem; left:50%; transform:translateX(-50%); gap:.6rem; align-items:center; font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,246,232,.45); }
+
+        .fauget-picks-section { background:#FFF6E8; color:#2B1B16; padding:6rem 0; }
+        .fauget-section-head { margin-bottom:2.6rem; }
+        .fauget-section-head-split { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; }
+        .fauget-section-head-split > p { max-width:430px; margin:0; color:rgba(43,27,22,.66); line-height:1.7; }
+        .fauget-section-kicker { text-transform:uppercase; letter-spacing:.18em; font-size:.7rem; font-weight:800; color:#B44E31; margin-bottom:.7rem; }
+        .fauget-section-head h2, .fauget-reviews-top h2, .fauget-contact-grid h2 { margin:0; font-family:'Sora',sans-serif; font-size:clamp(2rem,4vw,4rem); line-height:.95; letter-spacing:-.045em; color:#2B1B16; }
+        .fauget-picks-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1.2rem; }
+        .fauget-pick-card { position:relative; padding:1.35rem 1.35rem 1.45rem; min-height:480px; display:flex; flex-direction:column; border-radius:22px; overflow:hidden; }
+        .fauget-pick-burger { background:#D96A3F; color:#2C1A15; }
+        .fauget-pick-pizza { background:#E7B94D; color:#2C1A15; }
+        .fauget-pick-shake { background:#95A277; color:#233024; }
+        .fauget-pick-number { font-size:.72rem; font-weight:800; letter-spacing:.16em; opacity:.66; }
+        .fauget-pick-art { display:flex; align-items:center; justify-content:center; height:260px; margin:1rem -1rem 0; }
+        .fauget-pick-art img { max-width:88%; max-height:240px; object-fit:contain; filter:drop-shadow(0 20px 18px rgba(44,26,21,.18)); transition:transform .25s ease; }
+        .fauget-pick-card:hover .fauget-pick-art img { transform:translateY(-5px) scale(1.03); }
+        .fauget-pick-copy { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-top:auto; }
+        .fauget-pick-copy span { display:block; font-size:.65rem; letter-spacing:.16em; font-weight:800; opacity:.65; }
+        .fauget-pick-copy h3 { margin:.25rem 0 0; font-family:'Sora',sans-serif; font-size:1.55rem; line-height:1; }
+        .fauget-pick-copy strong { font-size:1.05rem; white-space:nowrap; }
+        .fauget-pick-card > p { margin:.9rem 0 1rem; line-height:1.55; max-width:30ch; opacity:.82; font-size:.9rem; }
+        .fauget-inline-link { display:inline-flex; align-items:center; gap:.5rem; font-size:.85rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+        .fauget-inline-link:hover { gap:.7rem; }
+
+        .fauget-process-section { background:#C85B38; color:#FFF6E8; padding:5.6rem 0; }
+        .fauget-section-head-light .fauget-section-kicker { color:#B44E31 !important; }
+        .fauget-section-head-light h2 { color:#2B1B16 !important; }
+        .fauget-outline-btn { display:inline-flex; align-items:center; gap:.6rem; padding:.8rem 1rem; border:1px solid rgba(43,27,22,.20); border-radius:12px; color:#2B1B16 !important; background:rgba(255,255,255,.18); font-weight:700; }
+        .fauget-outline-btn:hover { background:rgba(43,27,22,.06); }
+        .fauget-process-grid { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:1.4rem; }
+        .fauget-process-step { min-height:235px; display:flex; flex-direction:column; justify-content:flex-start; }
+        .fauget-process-step > span { font-family:'Sora',sans-serif; font-size:4.6rem; line-height:1; color:rgba(43,27,22,.10); }
+        .fauget-process-step > i { font-size:1.4rem; margin:1rem 0 .8rem; color:#B44E31 !important; }
+        .fauget-process-step h3 { margin:0 0 .45rem; font-family:'Sora',sans-serif; font-size:1.55rem; color:#2B1B16 !important; }
+        .fauget-process-step p { max-width:30ch; margin:0; color:rgba(43,27,22,.68) !important; line-height:1.6; }
+        .fauget-process-line { width:58px; height:1px; background:rgba(43,27,22,.18); }
+
+        .fauget-reviews-section { background:#4C2935; color:#FFF6E8; padding:6rem 0; }
+        .fauget-reviews-top { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; }
+        .fauget-reviews-top h2 { color:#FFF6E8; }
+        .fauget-rating-lockup { display:flex; align-items:center; gap:.65rem; flex-wrap:wrap; justify-content:flex-end; }
+        .fauget-stars { color:#F6CF68; letter-spacing:.08em; }
+        .fauget-rating-lockup strong { font-size:.95rem; }
+        .fauget-rating-lockup span { color:rgba(255,246,232,.56); font-size:.78rem; }
+        .fauget-featured-quote { max-width:940px; margin:4rem auto 0; text-align:center; }
+        .fauget-quote-mark { font-family:Georgia,serif; font-size:7rem; line-height:.55; color:#E8AE5F; opacity:.95; }
+        .fauget-featured-quote blockquote { margin:1.3rem auto 1.3rem; font-family:'Sora',sans-serif; font-weight:600; font-size:clamp(1.7rem,3.1vw,3.2rem); line-height:1.15; letter-spacing:-.03em; }
+        .fauget-quote-meta { display:flex; flex-direction:column; align-items:center; gap:.25rem; }
+        .fauget-quote-meta span { font-weight:800; }
+        .fauget-quote-meta small { color:rgba(255,246,232,.58); }
+        .fauget-mini-reviews { display:grid; grid-template-columns:1fr 1fr; gap:1rem; max-width:900px; margin:3rem auto 0; }
+        .fauget-mini-reviews article { padding:1.4rem 1.5rem; border-top:1px solid rgba(255,246,232,.18); }
+        .fauget-mini-reviews article i { color:#E8AE5F; }
+        .fauget-mini-reviews article p { margin:.8rem 0; color:rgba(255,246,232,.8); line-height:1.65; }
+        .fauget-mini-reviews article strong { font-size:.82rem; }
+
+        .fauget-contact-section { background:#FFF6E8; color:#2B1B16; padding:5.7rem 0; }
+        .fauget-contact-grid { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(280px,.55fr); align-items:end; gap:2.5rem; }
+        .fauget-contact-grid h2 { max-width:700px; }
+        .fauget-contact-grid > div:first-child > p:last-child { max-width:720px; margin-top:1rem; color:rgba(43,27,22,.66); line-height:1.7; }
+        .fauget-contact-actions { display:flex; flex-direction:column; gap:.8rem; align-items:stretch; }
+
+        #view-order { background:#2E1A13 !important; }
+        #view-about { background:#FFF6E8 !important; }
+        #view-why { background:#E5E8DA !important; }
+        #view-home .glass-card, #view-home .glass-card-hover { box-shadow:none; }
+        #view-home .rounded-2xl, #view-home .rounded-3xl { border-radius:18px; }
+
+        /* Mobile: center the complete hero stage as one composition. */
+        @media (max-width: 900px) {
+            .fauget-hero { min-height:auto; padding:3rem 0 2rem; }
+            .fauget-hero-grid { grid-template-columns:1fr; gap:1rem; }
+            .fauget-hero-copy { padding:1.5rem 0 .5rem; }
+            .fauget-hero-visual { min-height:340px; }
+            .fauget-person-stage { width:min(92vw, 390px); height:340px; margin:0 auto; }
+            .fauget-person-image { object-position:50% bottom; }
+            .hero-product-anchor { left:39% !important; top:73% !important; width:112px !important; height:112px !important; }
+            .fauget-product-callout { left:25%; top:26%; }
+            .fauget-hero-product-nav { left:50%; transform:translateX(-50%); bottom:2.5%; gap:.95rem; white-space:nowrap; }
+            .fauget-product-tab span { font-size:.67rem; }
+            .fauget-scroll-mark { display:none !important; }
+        }
+        @media (max-width: 639px) {
+            .fauget-hero { padding-top:2rem; }
+            .fauget-hero-copy { text-align:left; }
+            .fauget-eyebrow { font-size:.62rem; letter-spacing:.15em; }
+            .fauget-hero-title { font-size:clamp(2.7rem, 12vw, 4rem); }
+            .fauget-hero-lede { font-size:.97rem; line-height:1.62; }
+            .fauget-hero-actions { gap:.65rem; }
+            .fauget-btn { min-height:48px; padding:0 1rem; font-size:.88rem; border-radius:12px; }
+            .fauget-hero-promise { grid-template-columns:1fr 1fr 1fr; gap:.3rem; }
+            .fauget-hero-promise > div { flex-direction:column; justify-content:flex-start; text-align:center; gap:.35rem; font-size:.66rem; }
+            .fauget-hero-promise i { font-size:.8rem; }
+            .fauget-hero-visual { min-height:300px; }
+            .fauget-person-stage { width:min(96vw, 360px); height:300px; }
+            .fauget-hero-grid { gap:0; }
+            .fauget-product-callout { display:none !important; }
+            .fauget-picks-section, .fauget-process-section, .fauget-reviews-section, .fauget-contact-section { padding:4rem 0; }
+            .fauget-section-head-split, .fauget-reviews-top, .fauget-contact-grid { display:block; }
+            .fauget-section-head-split > p { margin-top:1rem; }
+            .fauget-picks-grid { grid-template-columns:1fr; gap:.9rem; }
+            .fauget-pick-card { min-height:430px; }
+            .fauget-process-grid { grid-template-columns:1fr; gap:1.3rem; }
+            .fauget-process-step { min-height:0; padding-bottom:1.2rem; border-bottom:1px solid rgba(43,27,22,.12); }
+            .fauget-process-line { display:none; }
+            .fauget-rating-lockup { justify-content:flex-start; margin-top:1.1rem; }
+            .fauget-featured-quote { margin-top:3rem; }
+            .fauget-mini-reviews { grid-template-columns:1fr; }
+            .fauget-contact-actions { margin-top:1.5rem; }
+        }
+
+    
+
+        /* =========================================================
+           ORDER CONFIRMATION TOAST
+           ========================================================= */
+        .fauget-add-toast[hidden] { display: none !important; }
+        .fauget-add-toast {
+            position: fixed;
+            z-index: 120;
+            left: 50%;
+            bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+            width: min(440px, calc(100vw - 28px));
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 15px;
+            border: 1px solid rgba(255, 246, 232, .15);
+            border-radius: 18px;
+            background: #2b1913;
+            color: #fff6e8;
+            box-shadow: 0 18px 55px rgba(17, 7, 3, .38);
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 18px) scale(.98);
+            transition: opacity .24s ease, transform .24s ease;
+        }
+        .fauget-add-toast.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, 0) scale(1);
+        }
+        .fauget-toast-check {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            color: #2b1913;
+            background: #e9b94e;
+            font-size: 1rem;
+        }
+        .fauget-toast-title { margin: 0; font-size: .91rem; font-weight: 800; line-height: 1.25; }
+        .fauget-toast-message { margin: 4px 0 0; color: rgba(255,246,232,.73); font-size: .75rem; line-height: 1.45; }
+        .fauget-toast-hint { margin: 4px 0 0; color: #e9b94e; font-size: .72rem; font-weight: 700; line-height: 1.4; }
+        .fauget-toast-view {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 36px;
+            padding: 0 10px;
+            border: 0;
+            border-radius: 10px;
+            background: #c95c36;
+            color: #fff;
+            font-size: .74rem;
+            font-weight: 800;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background .2s ease, transform .2s ease;
+        }
+        .fauget-toast-view:hover { background: #dd6a42; transform: translateY(-1px); }
+        .fauget-cart-focus { animation: faugetCartFocus 1.35s ease; border-radius: 12px; }
+        @keyframes faugetCartFocus {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(233,185,78,0); }
+            35% { box-shadow: 0 0 0 4px rgba(233,185,78,.55); }
+        }
+        @media (max-width: 430px) {
+            .fauget-add-toast { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 12px; border-radius: 15px; }
+            .fauget-toast-check { width: 36px; height: 36px; }
+            .fauget-toast-view { grid-column: 2; justify-self: start; min-height: 31px; margin-top: 2px; }
+            .fauget-toast-title { font-size: .86rem; }
+        }
+
+        /* =========================================================
+           FAUGET FOOD FILM — cinematic CSS 3D preview with a drop-in
+           muted/looping video slot for the real film when available.
+           ========================================================= */
+        .fauget-food-film-section {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: clamp(4rem, 7vw, 7rem) 0;
+            color: #fff6e8;
+            background:
+              radial-gradient(circle at 82% 44%, rgba(201,92,54,.2), transparent 28%),
+              linear-gradient(130deg, #25140f 0%, #402116 54%, #25140f 100%);
+        }
+        .fauget-food-film-section::before {
+            content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .15;
+            background-image: radial-gradient(rgba(255,246,232,.4) .6px, transparent .7px);
+            background-size: 12px 12px;
+            mask-image: linear-gradient(115deg, transparent 10%, #000 65%, transparent 100%);
+        }
+        .fauget-food-film-inner {
+            display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.18fr);
+            align-items: center; gap: clamp(2rem, 5vw, 5rem);
+        }
+        .fauget-film-kicker {
+            display: flex; align-items: center; gap: .6rem;
+            margin: 0 0 1rem; color: #e9b94e; font-size: .7rem; font-weight: 800;
+            letter-spacing: .18em; text-transform: uppercase;
+        }
+        .fauget-film-kicker i { color: #df6c41; }
+        .fauget-film-copy h2 {
+            margin: 0; max-width: 570px; color: #fff6e8;
+            font-family: 'Sora', sans-serif; font-size: clamp(2.3rem, 4.5vw, 4.6rem);
+            font-weight: 800; line-height: .98; letter-spacing: -.05em;
+        }
+        .fauget-film-copy h2 em { color: #e9b94e; font-style: normal; }
+        .fauget-film-copy > p:not(.fauget-film-kicker) {
+            margin: 1.2rem 0 0; max-width: 470px; color: rgba(255,246,232,.72); line-height: 1.75;
+        }
+        .fauget-film-note {
+            display: flex; align-items: center; gap: .7rem; margin-top: 1.8rem;
+            color: rgba(255,246,232,.62); font-size: .75rem; letter-spacing: .04em;
+        }
+        .fauget-film-note i { color: #e9b94e; }
+        .fauget-film-frame {
+            position: relative; min-width: 0; aspect-ratio: 16 / 10; min-height: 320px;
+            overflow: hidden; isolation: isolate; border-radius: 26px;
+            border: 1px solid rgba(255,246,232,.17);
+            background: #1b100c;
+            box-shadow: 0 28px 70px rgba(12,5,2,.36);
+        }
+        .fauget-film-video {
+            display: none; position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; background: #1b100c; z-index: 5;
+        }
+        .fauget-film-frame.has-video .fauget-film-video { display: block; }
+        .fauget-film-frame.has-video .fauget-film-fallback { display: none; }
+        .fauget-film-fallback { position: absolute; inset: 0; overflow: hidden; background:
+            radial-gradient(ellipse at 50% 54%, rgba(230,153,77,.16), transparent 42%),
+            linear-gradient(145deg, #48271a, #21120d 74%); }
+        .fauget-film-frame::after {
+            content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+            background: linear-gradient(180deg, rgba(18,8,4,.23), transparent 30%, transparent 65%, rgba(18,8,4,.42));
+        }
+        .fauget-film-topline, .fauget-film-bottomline {
+            position: absolute; z-index: 7; left: 20px; right: 20px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            color: rgba(255,246,232,.9); text-transform: uppercase; font-weight: 800; letter-spacing: .15em; font-size: .62rem; pointer-events: none;
+        }
+        .fauget-film-topline { top: 18px; }
+        .fauget-film-bottomline { bottom: 18px; }
+        .fauget-film-topline span:last-child { color: #e9b94e; }
+        .fauget-film-live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #e9b94e; margin-right: 7px; box-shadow: 0 0 0 4px rgba(233,185,78,.13); }
+        .fauget-film-fallback::before, .fauget-film-fallback::after {
+            content: ""; position: absolute; width: 220px; height: 220px; border: 1px solid rgba(233,185,78,.1); border-radius: 50%; left: 50%; top: 52%; transform: translate(-50%,-50%);
+        }
+        .fauget-film-fallback::after { width: 330px; height: 330px; border-style: dashed; animation: faugetFilmOrbit 38s linear infinite; }
+        .fauget-film-ingredients { position: absolute; inset: 0; perspective: 1000px; }
+        .fauget-film-ingredient {
+            position: absolute; z-index: 1; width: var(--size, 10px); height: var(--size, 10px); left: var(--x); top: var(--y);
+            border-radius: 50%; background: var(--color); opacity: .75; box-shadow: 0 3px 14px rgba(0,0,0,.2);
+            animation: faugetIngredientDrift var(--duration, 5s) ease-in-out var(--delay, 0s) infinite alternate;
+        }
+        .fauget-film-pizza-wrap {
+            position: absolute; width: min(54%, 310px); aspect-ratio: 1; left: 50%; top: 52%;
+            transform: translate(-50%,-50%); display: grid; place-items: center;
+            animation: faugetPizzaHover 4.8s ease-in-out infinite;
+            filter: drop-shadow(0 28px 25px rgba(9,4,2,.45));
+        }
+        .fauget-film-pizza {
+            position: relative; width: 100%; height: 100%; border-radius: 50%;
+            border: 13px solid #b96d36;
+            background:
+              radial-gradient(circle at 31% 27%, #d94c38 0 4%, transparent 4.8%),
+              radial-gradient(circle at 61% 24%, #2f231c 0 3.5%, transparent 4.3%),
+              radial-gradient(circle at 70% 46%, #d94c38 0 4.2%, transparent 4.9%),
+              radial-gradient(circle at 42% 53%, #2f231c 0 3.6%, transparent 4.4%),
+              radial-gradient(circle at 28% 67%, #d94c38 0 4.4%, transparent 5.1%),
+              radial-gradient(circle at 61% 72%, #2f231c 0 3.5%, transparent 4.3%),
+              radial-gradient(circle at 53% 37%, #4f7a3e 0 3%, transparent 3.6%),
+              radial-gradient(circle at 35% 42%, #4f7a3e 0 3%, transparent 3.7%),
+              radial-gradient(circle at 73% 62%, #4f7a3e 0 3%, transparent 3.7%),
+              radial-gradient(circle at 50% 50%, #f9d878 0%, #eabf4e 59%, #d69c3d 100%);
+            box-shadow: inset 0 0 0 5px #e8ad53, inset 0 0 0 10px rgba(255,239,173,.32), 0 0 0 3px rgba(80,35,17,.8);
+            transform-style: preserve-3d;
+            animation: faugetPizzaTurn 18s linear infinite;
+        }
+        .fauget-film-pizza::before {
+            content: ""; position: absolute; inset: 7%; border-radius: 50%; border: 1px solid rgba(151,66,36,.22);
+            background: repeating-conic-gradient(from 8deg, rgba(255,248,216,.08) 0 7deg, rgba(143,63,36,.04) 7deg 15deg);
+        }
+        .fauget-film-pizza::after {
+            content: ""; position: absolute; left: 11%; top: 48%; width: 78%; height: 5px; border-radius: 99px;
+            background: rgba(255,242,183,.52); transform: rotate(-22deg); filter: blur(1px);
+        }
+        .fauget-film-topping { position: absolute; z-index: 2; left: var(--x); top: var(--y); width: var(--s, 26px); height: var(--s, 26px); transform: translate(-50%,-50%) rotate(var(--r,0deg)); border-radius: 50%; }
+        .fauget-film-topping.pepperoni { background: radial-gradient(circle at 35% 30%, #f77c59 0 12%, #ba382a 42%, #92291e 100%); border: 2px solid rgba(255,201,121,.62); box-shadow: inset 0 0 0 3px rgba(130,38,23,.25), 0 2px 3px rgba(73,27,13,.23); }
+        .fauget-film-topping.olive { background: #28221c; border: 5px solid #514034; box-shadow: inset 0 0 0 2px #9b7651; }
+        .fauget-film-topping.pepper { width: calc(var(--s, 26px) * 1.3); height: calc(var(--s, 26px) * .38); border-radius: 99px; border: 4px solid #5f823d; background: rgba(132,161,73,.24); }
+        .fauget-film-slice {
+            position: absolute; z-index: 4; width: 34%; height: 40%; right: 1%; top: 0;
+            clip-path: polygon(49% 0%, 100% 100%, 0% 100%);
+            background: linear-gradient(180deg, #f8d56e, #e9ae41 80%);
+            filter: drop-shadow(0 12px 10px rgba(12,5,2,.35));
+            transform-origin: 50% 90%; animation: faugetSliceLift 4.5s ease-in-out infinite;
+        }
+        .fauget-film-slice::before { content:""; position:absolute; inset:6% 10% 7%; clip-path:polygon(49% 0%, 100% 100%, 0% 100%); background:
+            radial-gradient(circle at 51% 29%, #b63227 0 6%, transparent 7%),
+            radial-gradient(circle at 34% 52%, #4b3022 0 6%, transparent 7%),
+            radial-gradient(circle at 65% 70%, #b63227 0 6%, transparent 7%),
+            radial-gradient(circle at 54% 55%, #618044 0 5%, transparent 6%),
+            #f4d56c; }
+        .fauget-film-slice::after { content:""; position:absolute; bottom:0; left:0; right:0; height:13%; background:#b96d36; border-radius:0 0 50% 50%; }
+        .fauget-film-stamp {
+            position: absolute; z-index: 6; left: 6%; bottom: 18%; width: 80px; height: 80px; display: grid; place-items: center; text-align:center;
+            border: 1px solid rgba(233,185,78,.7); border-radius: 50%; color: #e9b94e; font-size: .53rem; font-weight: 900; letter-spacing: .12em; line-height: 1.45;
+            transform: rotate(-13deg); background: rgba(37,20,15,.42); box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+        @keyframes faugetPizzaTurn { from { transform: rotateX(49deg) rotateY(-15deg) rotateZ(-12deg); } to { transform: rotateX(49deg) rotateY(-15deg) rotateZ(348deg); } }
+        @keyframes faugetPizzaHover { 0%,100% { transform: translate(-50%,-50%) translateY(5px); } 50% { transform: translate(-50%,-50%) translateY(-9px); } }
+        @keyframes faugetSliceLift { 0%,100% { transform: rotate(-8deg) translateY(8px) translateX(0); } 45%,55% { transform: rotate(7deg) translateY(-16px) translateX(3px); } }
+        @keyframes faugetIngredientDrift { from { transform: translate3d(0,0,0) scale(.9); } to { transform: translate3d(8px,-14px,22px) scale(1.1); } }
+        @keyframes faugetFilmOrbit { from { transform: translate(-50%,-50%) rotate(0); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+        @media (max-width: 900px) {
+            .fauget-food-film-inner { grid-template-columns: 1fr; gap: 2rem; }
+            .fauget-film-copy { max-width: 680px; }
+            .fauget-film-frame { width: 100%; }
+        }
+        @media (max-width: 600px) {
+            .fauget-food-film-section { padding: 3.8rem 0; }
+            .fauget-food-film-inner { gap: 1.5rem; }
+            .fauget-film-copy h2 { font-size: clamp(2.35rem, 11vw, 3.4rem); }
+            .fauget-film-frame { min-height: 0; aspect-ratio: 4 / 5; border-radius: 20px; }
+            .fauget-film-pizza-wrap { width: 61%; }
+            .fauget-film-stamp { width: 62px; height: 62px; font-size: .43rem; left: 5%; bottom: 17%; }
+            .fauget-film-topline, .fauget-film-bottomline { left: 14px; right: 14px; font-size: .52rem; }
+            .fauget-film-topline { top: 14px; }
+            .fauget-film-bottomline { bottom: 14px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .fauget-film-fallback *, .fauget-film-fallback::after { animation: none !important; }
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-fauget-orange selection:text-white">
+
+    <!-- GLOBAL NAVIGATION HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-fauget-dark/96 border-b border-fauget-softCream/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#home" onclick="showView('home')" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-9 h-9 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-fauget-orange p-0.5 bg-fauget-secondary flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                    <!-- FAUGET LOGO ASSET -->
+                    <img src=".//images.jpg" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%23211813\' stroke=\'%23D36A2E\' stroke-width=\'3\'/><text x=\'50\' y=\'45\' font-family=\'Sora\' font-size=\'14\' font-weight=\'bold\' fill=\'%23FFF5E8\' text-anchor=\'middle\'>FAUGET</text><text x=\'50\' y=\'62\' font-family=\'Inter\' font-size=\'8\' fill=\'%23F2C65A\' text-anchor=\'middle\'>EST. 2002</text></svg>'" alt="Fauget Logo" class="w-full h-full object-contain">
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-sm md:text-xl tracking-wider text-fauget-cream group-hover:text-fauget-orange transition-colors">FAUGET</span>
+                    <span class="text-[8px] md:text-[10px] text-fauget-gold tracking-widest uppercase font-medium">Burger & Pizza • Est. 2002</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#home" onclick="showView('home')" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors" data-target="home">Home</a>
+                <a href="#order" onclick="showView('order')" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors" data-target="order">Menu</a>
+                <a href="#why" onclick="showView('why')" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors" data-target="why">Why Fauget</a>
+                <a href="#about" onclick="showView('about')" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors" data-target="about">About</a>
+                <a href="#reviews" onclick="showView('home'); scrollToSection('reviews');" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors">Reviews</a>
+                <a href="#ceo-contact" onclick="showView('home'); scrollToSection('ceo-contact');" class="nav-link text-sm font-medium text-fauget-cream/80 hover:text-fauget-orange transition-colors">Contact</a>
+            </nav>
+
+            <!-- Navigation Actions -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="#order" onclick="showView('order')" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-fauget-caramel to-fauget-orange text-white font-medium text-sm shadow-lg shadow-fauget-orange/20 hover:brightness-110 active:scale-95 transition-all">
+                    <span>Order Now</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-fauget-secondary border border-fauget-softCream/10 text-fauget-cream hover:text-fauget-orange focus:outline-none" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Full-screen / Drawer Navigation -->
+        <div id="mobile-drawer" class="hidden md:hidden fixed inset-x-0 top-20 bg-fauget-dark/95 backdrop-blur-xl border-b border-fauget-softCream/10 p-6 shadow-2xl transition-all duration-300">
+            <div class="flex flex-col gap-4">
+                <a href="#home" onclick="showView('home'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">Home</a>
+                <a href="#order" onclick="showView('order'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">Menu / Order</a>
+                <a href="#why" onclick="showView('why'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">Why Fauget</a>
+                <a href="#about" onclick="showView('about'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">About Fauget</a>
+                <a href="#reviews" onclick="showView('home'); scrollToSection('reviews'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">Customer Reviews</a>
+                <a href="#ceo-contact" onclick="showView('home'); scrollToSection('ceo-contact'); toggleMobileMenu();" class="text-lg font-medium py-2 px-4 rounded-lg text-fauget-cream hover:bg-fauget-secondary">Investor / Contact</a>
+                <a href="#order" onclick="showView('order'); toggleMobileMenu();" class="mt-2 w-full text-center py-3 rounded-full bg-gradient-to-r from-fauget-caramel to-fauget-orange text-white font-semibold shadow-lg">
+                    Order Your Meal <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER FOR ALL VIEWS -->
+    <main class="flex-grow pt-16 md:pt-20">
+
+        <!-- ========================================================= -->
+        <!-- VIEW 1: HOMEPAGE (index.html equivalent)                 -->
+        <!-- ========================================================= -->
+        <div id="view-home" class="view-panel transition-opacity duration-300">
+
+    <!-- ========================================================= -->
+    <!-- HERO: editorial food-brand direction -->
+    <!-- ========================================================= -->
+    <section class="fauget-hero relative overflow-hidden">
+        <div class="fauget-hero-grain" aria-hidden="true"></div>
+        <div class="fauget-hero-blob fauget-hero-blob-one" aria-hidden="true"></div>
+        <div class="fauget-hero-blob fauget-hero-blob-two" aria-hidden="true"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="fauget-hero-grid">
+                <div class="fauget-hero-copy">
+                    <p class="fauget-eyebrow"><span class="fauget-eyebrow-dot"></span> FAUGET KITCHEN · EST. 2002</p>
+                    <h1 class="fauget-hero-title">
+                        <span>GOOD FOOD.</span>
+                        <span>GREAT MOOD.</span>
+                        <span class="fauget-hero-title-accent hero-typing-line" aria-live="polite">
+                            <span id="hero-typing-text">Delivered.</span><span class="hero-typing-caret" aria-hidden="true"></span>
+                        </span>
+                    </h1>
+                    <p class="fauget-hero-lede">Fresh burgers, proper pizza and creamy shakes, made hot and brought to you without the fuss.</p>
+
+                    <div class="fauget-hero-actions">
+                        <a href="#order" onclick="showView('order')" class="fauget-btn fauget-btn-primary">
+                            <span>Order your meal</span><i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#order" onclick="showView('order')" class="fauget-btn fauget-btn-quiet">
+                            <i class="fa-solid fa-utensils"></i><span>See the menu</span>
+                        </a>
+                    </div>
+
+                    <div class="fauget-hero-promise">
+                        <div><i class="fa-solid fa-fire"></i><span>Fresh off the grill</span></div>
+                        <div><i class="fa-solid fa-motorcycle"></i><span>Fast to your door</span></div>
+                        <div><i class="fa-solid fa-wallet"></i><span>Good value</span></div>
+                    </div>
+                </div>
+
+                <div class="fauget-hero-visual">
+                    <div id="hero-person-wrapper" class="hero-person-wrap fauget-person-stage select-none">
+                        <div class="fauget-hero-glow" aria-hidden="true"></div>
+                        <div class="fauget-hero-arc" aria-hidden="true"></div>
+
+                        <div class="hero-product-label fauget-product-callout hidden sm:block">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-utensils text-fauget-gold text-[10px]"></i>
+                                <span id="hero-product-label">Signature Milkshake</span>
+                            </div>
+                            <div class="fauget-product-callout-line"></div>
+                        </div>
+
+                        <img src=".//Firefly_RemoveBackground.png"
+                             onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 500 600\'><path d=\'M 150 600 Q 250 200 350 600\' fill=\'%23211813\'/><circle cx=\'250\' cy=\'200\' r=\'80\' fill=\'%23B86F43\'/><path d=\'M 200 400 L 380 400 L 350 550 L 220 550 Z\' fill=\'%238F4F2E\'/></svg>'"
+                             alt="Fauget Brand Representative"
+                             class="fauget-person-image pointer-events-none">
+
+                        <div class="hero-product-anchor">
+                            <img id="hero-product-img"
+                                 src=".//Firefly (2).png"
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 300\'><rect x=\'60\' y=\'80\' width=\'80\' height=\'180\' rx=\'20\' fill=\'%23D36A2E\'/><circle cx=\'100\' cy=\'70\' r=\'35\' fill=\'%23FFF5E8\'/><rect x=\'95\' y=\'20\' width=\'10\' height=\'80\' fill=\'%23F2C65A\'/></svg>'"
+                                 alt="Signature Milkshake"
+                                 class="hero-product-img">
+                        </div>
+
+                        <div class="fauget-hero-product-nav">
+                            <button onclick="setHeroProduct(0)" class="hero-thumb fauget-product-tab" aria-label="Burger">
+                                <i class="fa-solid fa-burger"></i><span>Burger</span>
+                            </button>
+                            <button onclick="setHeroProduct(1)" class="hero-thumb fauget-product-tab" aria-label="Pizza">
+                                <i class="fa-solid fa-pizza-slice"></i><span>Pizza</span>
+                            </button>
+                            <button onclick="setHeroProduct(2)" class="hero-thumb fauget-product-tab is-active" aria-label="Milkshake">
+                                <i class="fa-solid fa-glass-water"></i><span>Shake</span>
+                            </button>
+                            <button onclick="nextHeroProduct()" class="fauget-product-next" aria-label="Next food">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fauget-scroll-mark hidden sm:flex" aria-hidden="true">
+            <span>Scroll to explore</span><i class="fa-solid fa-arrow-down"></i>
+        </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SIGNATURE PICKS: food-first editorial section -->
+    <!-- ========================================================= -->
+    <section id="signature-picks" class="fauget-picks-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fauget-section-head fauget-section-head-split">
+                <div>
+                    <p class="fauget-section-kicker">FROM THE FAUGET KITCHEN</p>
+                    <h2>Three things worth craving.</h2>
+                </div>
+                <p>Big flavours, familiar favourites and a little extra attitude. Pick your mood and we’ll handle the rest.</p>
+            </div>
+
+            <div class="fauget-picks-grid">
+                <article class="fauget-pick-card fauget-pick-burger">
+                    <div class="fauget-pick-number">01</div>
+                    <div class="fauget-pick-art"><img src=".//Firefly (4).png" alt="Signature Fauget Burger" loading="lazy"></div>
+                    <div class="fauget-pick-copy">
+                        <div><span>BESTSELLER</span><h3>Signature Burger</h3></div>
+                        <strong>₦3,500</strong>
+                    </div>
+                    <p>Flame-grilled beef, melted cheese, crisp lettuce and Fauget house sauce in a toasted bun.</p>
+                    <a href="#order" onclick="showView('order')" class="fauget-inline-link">Order this <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
+
+                <article class="fauget-pick-card fauget-pick-pizza">
+                    <div class="fauget-pick-number">02</div>
+                    <div class="fauget-pick-art"><img src=".//Firefly (5).png" alt="Signature Fauget Pizza" loading="lazy"></div>
+                    <div class="fauget-pick-copy">
+                        <div><span>HOUSE FAVOURITE</span><h3>Signature Pizza</h3></div>
+                        <strong>₦6,500</strong>
+                    </div>
+                    <p>Golden crust, rich tomato marinara, mozzarella, pepperoni, peppers and herbs.</p>
+                    <a href="#order" onclick="showView('order')" class="fauget-inline-link">Order this <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
+
+                <article class="fauget-pick-card fauget-pick-shake">
+                    <div class="fauget-pick-number">03</div>
+                    <div class="fauget-pick-art"><img src=".//Firefly (6).png" alt="Signature Fauget Milkshake" loading="lazy"></div>
+                    <div class="fauget-pick-copy">
+                        <div><span>SOMETHING SWEET</span><h3>Creamy Milkshake</h3></div>
+                        <strong>₦2,200</strong>
+                    </div>
+                    <p>Thick strawberry-vanilla goodness finished with whipped cream and a little extra joy.</p>
+                    <a href="#order" onclick="showView('order')" class="fauget-inline-link">Order this <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- HOW IT WORKS: horizontal process, not UI cards -->
+    <!-- ========================================================= -->
+   
+    <!-- =========================================================
+     HOW IT WORKS — IMAGE STORY SECTION
+     Replace your existing #how-it-works section with this
+     ========================================================= -->
+
+<style>
+    /* ---------- HOW IT WORKS ---------- */
+
+    .fauget-process-section {
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 0;
+        background: #fff0de;
+        color: #2b1b16;
+    }
+
+    .fauget-process-section::before {
+        content: "";
+        position: absolute;
+        width: 460px;
+        height: 460px;
+        right: -180px;
+        bottom: -180px;
+        border-radius: 50%;
+        background: rgba(217, 104, 54, 0.08);
+        filter: blur(8px);
+        pointer-events: none;
+    }
+
+    .fauget-process-container {
+        position: relative;
+        z-index: 2;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+
+    .fauget-process-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .fauget-process-kicker {
+        margin: 0 0 0.7rem;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c85b38;
+    }
+
+    .fauget-process-header h2 {
+        margin: 0;
+        max-width: 720px;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(2.4rem, 5vw, 4.7rem);
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+        color: #2b1b16;
+    }
+
+    .fauget-process-intro {
+        max-width: 620px;
+        margin: 1rem 0 0;
+        color: rgba(43, 27, 22, 0.67);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .fauget-process-order-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.9rem 1.15rem;
+        border: 1px solid rgba(43, 27, 22, 0.2);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.45);
+        color: #2b1b16;
+        font-weight: 800;
+        text-decoration: none;
+        transition: 0.25s ease;
+        white-space: nowrap;
+    }
+
+    .fauget-process-order-btn:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .fauget-process-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr) 70px minmax(0, 1fr);
+        align-items: start;
+        gap: 1.3rem;
+    }
+
+    .fauget-process-step {
+        min-width: 0;
+    }
+
+    .fauget-process-step-number {
+        margin-bottom: 0.6rem;
+        font-family: "Sora", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        color: #c85b38;
+        text-transform: uppercase;
+    }
+
+    .fauget-process-image-wrap {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 1rem;
+        background: #f7e2c9;
+        border: 1px solid rgba(43, 27, 22, 0.08);
+        border-radius: 28px;
+    }
+
+    .fauget-process-image-wrap.food-selection {
+        align-items: center;
+        gap: 0.2rem;
+        padding: 1.2rem;
+    }
+
+    .fauget-process-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center bottom;
+        filter: drop-shadow(0 18px 20px rgba(43, 27, 22, 0.14));
+        transition: transform 0.45s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .fauget-process-step:hover .fauget-process-image {
+        transform: translateY(-6px) scale(1.025);
+    }
+
+    .fauget-mini-food {
+        flex: 1 1 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .fauget-mini-food img {
+        width: 100%;
+        height: 100%;
+        max-height: 220px;
+        object-fit: contain;
+        filter: drop-shadow(0 14px 16px rgba(43, 27, 22, 0.1));
+        transition: transform 0.35s ease;
+    }
+
+    .fauget-process-step:hover .fauget-mini-food img {
+        transform: translateY(-4px);
+    }
+
+    .fauget-process-copy {
+        padding-top: 1.15rem;
+    }
+
+    .fauget-process-copy h3 {
+        margin: 0 0 0.45rem;
+        font-family: "Sora", sans-serif;
+        font-size: 1.7rem;
+        line-height: 1;
+        color: #2b1b16;
+    }
+
+    .fauget-process-copy p {
+        max-width: 32ch;
+        margin: 0;
+        color: rgba(43, 27, 22, 0.7);
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    .fauget-process-divider {
+        width: 1px;
+        height: 330px;
+        background: rgba(43, 27, 22, 0.12);
+        justify-self: center;
+    }
+
+    /* ---------- TABLET ---------- */
+
+    @media (max-width: 1000px) {
+        .fauget-process-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem 1.5rem;
+        }
+
+        .fauget-process-divider {
+            display: none;
+        }
+    }
+
+    /* ---------- PHONE ---------- */
+
+    @media (max-width: 640px) {
+        .fauget-process-section {
+            padding: 4.5rem 0;
+        }
+
+        .fauget-process-container {
+            padding: 0 18px;
+        }
+
+        .fauget-process-header {
+            display: block;
+            margin-bottom: 2.5rem;
+        }
+
+        .fauget-process-header h2 {
+            font-size: clamp(2.2rem, 11vw, 3.4rem);
+        }
+
+        .fauget-process-intro {
+            font-size: 0.92rem;
+        }
+
+        .fauget-process-order-btn {
+            margin-top: 1.1rem;
+        }
+
+        .fauget-process-grid {
+            grid-template-columns: 1fr;
+            gap: 2.8rem;
+        }
+
+        .fauget-process-image-wrap {
+            height: 250px;
+            border-radius: 22px;
+        }
+
+        .fauget-process-image-wrap.food-selection {
+            height: 220px;
+            padding: 0.6rem;
+        }
+
+        .fauget-mini-food img {
+            max-height: 170px;
+        }
+
+        .fauget-process-copy {
+            padding-top: 0.9rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(43, 27, 22, 0.1);
+        }
+
+        .fauget-process-step:last-child .fauget-process-copy {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+
+
+    /* Featured food carousel: one clear hero product, two smaller side items. */
+    .fauget-process-image-wrap.food-selection.fauget-food-stage {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 390px;
+        padding: 0 !important;
+        overflow: hidden;
+        isolation: isolate;
+        border: 1px solid rgba(116, 71, 43, .12);
+        border-radius: 26px;
+        background:
+            radial-gradient(ellipse at 50% 46%, rgba(255, 250, 241, .96) 0%, rgba(250, 230, 204, .96) 47%, rgba(242, 218, 190, .96) 100%);
+    }
+
+    .fauget-food-slide {
+        position: absolute;
+        top: 47%;
+        left: 50%;
+        width: 31%;
+        height: 70%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 14px;
+        background: transparent;
+        box-shadow: none;
+        cursor: pointer;
+        opacity: .62;
+        filter: saturate(.84);
+        transform: translate(-50%, -50%) scale(.74);
+        transform-origin: center center;
+        z-index: 1;
+        transition:
+            left .78s cubic-bezier(.2, .75, .25, 1),
+            width .78s cubic-bezier(.2, .75, .25, 1),
+            height .78s cubic-bezier(.2, .75, .25, 1),
+            transform .78s cubic-bezier(.2, .75, .25, 1),
+            opacity .6s ease,
+            filter .6s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .fauget-food-slide[data-position="left"] {
+        left: 14%;
+    }
+
+    .fauget-food-slide[data-position="right"] {
+        left: 86%;
+    }
+
+    .fauget-food-slide[data-position="center"] {
+        left: 50%;
+        width: 52%;
+        height: 91%;
+        opacity: 1;
+        filter: none;
+        transform: translate(-50%, -50%) scale(1);
+        z-index: 3;
+        cursor: pointer;
+    }
+
+    .fauget-food-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: contain;
+        object-position: center;
+        pointer-events: none;
+        filter: drop-shadow(0 18px 20px rgba(74, 39, 28, .17));
+        user-select: none;
+    }
+
+    .fauget-food-slide[data-position="center"] img {
+        filter: drop-shadow(0 22px 24px rgba(74, 39, 28, .22));
+    }
+
+    .fauget-food-slide:focus-visible,
+    .fauget-food-pagination button:focus-visible {
+        outline: 2px solid #B94F31;
+        outline-offset: 4px;
+    }
+
+    .fauget-food-pagination {
+        position: absolute;
+        bottom: .85rem;
+        left: 50%;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .42rem;
+        transform: translateX(-50%);
+    }
+
+    .fauget-food-pagination button {
+        width: 7px;
+        height: 7px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(74, 39, 28, .27);
+        box-shadow: none;
+        cursor: pointer;
+        transition: width .3s ease, background .3s ease;
+    }
+
+    .fauget-food-pagination button.is-active {
+        width: 25px;
+        background: #B94F31;
+    }
+
+    @media (max-width: 1000px) {
+        .fauget-process-image-wrap.food-selection.fauget-food-stage {
+            height: clamp(300px, 43vw, 370px);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .fauget-process-image-wrap.food-selection.fauget-food-stage {
+            height: clamp(275px, 80vw, 335px);
+            border-radius: 22px;
+        }
+
+        .fauget-food-slide {
+            width: 32%;
+            height: 68%;
+            transform: translate(-50%, -50%) scale(.72);
+        }
+
+        .fauget-food-slide[data-position="left"] {
+            left: 14%;
+        }
+
+        .fauget-food-slide[data-position="right"] {
+            left: 86%;
+        }
+
+        .fauget-food-slide[data-position="center"] {
+            width: 56%;
+            height: 91%;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .fauget-food-pagination {
+            bottom: .7rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .fauget-food-slide,
+        .fauget-food-pagination button {
+            transition: none !important;
+        }
+    }
+</style>
+
+<!-- =========================================================
+     FAUGET FOOD FILM — CSS 3D preview, ready for your real video
+     To use your video later, add a source inside the video tag:
+     <source src="videos/fauget-food-film.mp4" type="video/mp4">
+     Keep autoplay, muted, loop and playsinline for silent autoplay.
+     ========================================================= -->
+<section id="fauget-food-film" class="fauget-food-film-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="fauget-food-film-inner">
+            <div class="fauget-film-copy">
+                <p class="fauget-film-kicker"><i class="fa-solid fa-fire-flame-curved"></i> FRESH FROM THE FAUGET KITCHEN</p>
+                <h2>Hear the crunch.<br>Feel the <em>craving.</em></h2>
+                <p>Golden crust, bubbling cheese, rich toppings. We make the kind of food that makes you stop scrolling and start craving.</p>
+                <div class="fauget-film-note"><i class="fa-solid fa-circle-play"></i><span>A little taste of what’s coming out of our kitchen.</span></div>
+            </div>
+
+            <div class="fauget-film-frame" id="fauget-food-film-frame">
+                <!-- Add your MP4/WebM source here later. The video will autoplay muted and loop. -->
+                <video id="fauget-food-film-video" class="fauget-film-video" autoplay muted loop playsinline preload="metadata" aria-label="Silent looping Fauget food film">
+                    <!-- Example: <source src="videos/fauget-food-film.mp4" type="video/mp4"> -->
+                     <source src=".//From Klickpin.com- Side Hustle Ideas for a More Beautiful Life 17243-pin-id-907827237394460205.mp4" type="video/mp4">
+                </video>
+
+                <!-- Animated 3D-style placeholder shown until a video source is added. -->
+                <div class="fauget-film-fallback" aria-hidden="true">
+                    <div class="fauget-film-ingredients">
+                        <span class="fauget-film-ingredient" style="--x:18%;--y:30%;--color:#e9b94e;--size:7px;--duration:4.8s"></span>
+                        <span class="fauget-film-ingredient" style="--x:79%;--y:27%;--color:#c95c36;--size:11px;--duration:5.4s;--delay:-1s"></span>
+                        <span class="fauget-film-ingredient" style="--x:20%;--y:67%;--color:#7e9951;--size:9px;--duration:4.2s;--delay:-2s"></span>
+                        <span class="fauget-film-ingredient" style="--x:83%;--y:71%;--color:#e9b94e;--size:6px;--duration:5.6s;--delay:-.7s"></span>
+                        <span class="fauget-film-ingredient" style="--x:68%;--y:16%;--color:#fff0c6;--size:5px;--duration:4.1s;--delay:-1.4s"></span>
+
+                        <div class="fauget-film-pizza-wrap">
+                            <div class="fauget-film-pizza">
+                                <span class="fauget-film-topping pepperoni" style="--x:28%;--y:24%;--s:27px"></span>
+                                <span class="fauget-film-topping olive" style="--x:55%;--y:20%;--s:24px"></span>
+                                <span class="fauget-film-topping pepper" style="--x:74%;--y:32%;--s:28px;--r:25deg"></span>
+                                <span class="fauget-film-topping pepperoni" style="--x:39%;--y:43%;--s:28px"></span>
+                                <span class="fauget-film-topping olive" style="--x:66%;--y:51%;--s:22px"></span>
+                                <span class="fauget-film-topping pepperoni" style="--x:23%;--y:61%;--s:24px"></span>
+                                <span class="fauget-film-topping pepper" style="--x:47%;--y:70%;--s:31px;--r:-24deg"></span>
+                                <span class="fauget-film-topping olive" style="--x:76%;--y:73%;--s:22px"></span>
+                                <span class="fauget-film-topping pepperoni" style="--x:50%;--y:31%;--s:19px"></span>
+                            </div>
+                            <div class="fauget-film-slice"></div>
+                        </div>
+                        <div class="fauget-film-stamp">MADE<br>FRESH<br>DAILY</div>
+                    </div>
+                </div>
+
+                <div class="fauget-film-topline"><span><i class="fauget-film-live-dot"></i> FAUGET FOOD FILM</span><span>Fresh • Hot • Proper</span></div>
+                <div class="fauget-film-bottomline"><span>From our kitchen to you</span><span>01 / Made with care</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="fauget-process-section">
+    <div class="fauget-process-container">
+
+        <!-- HEADER -->
+        <div class="fauget-process-header">
+            <div>
+                <p class="fauget-process-kicker">SIMPLE BY DESIGN</p>
+
+                <h2>
+                    Pick it.<br>
+                    We cook it.<br>
+                    We bring it.
+                </h2>
+
+                <p class="fauget-process-intro">
+                    From the moment you choose your meal to the moment it reaches your door,
+                    Fauget keeps everything simple.
+                </p>
+            </div>
+
+            <a
+                href="#order"
+                onclick="showView('order')"
+                class="fauget-process-order-btn"
+            >
+                Start an order
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- STEPS -->
+        <div class="fauget-process-grid">
+
+            <!-- =======================
+                 STEP 1
+                 ======================= -->
+            <article class="fauget-process-step">
+
+                <div class="fauget-process-step-number">
+                    01 · PICK YOUR CRAVING
+                </div>
+
+                <div
+                    class="fauget-process-image-wrap food-selection fauget-food-stage"
+                    id="fauget-food-stage"
+                    role="group"
+                    aria-roledescription="carousel"
+                    aria-label="Featured Fauget food. The spotlight rotates automatically."
+                >
+                    <button
+                        type="button"
+                        class="fauget-food-slide"
+                        data-food-index="0"
+                        data-position="center"
+                        onclick="setFoodSpotlight(0)"
+                        aria-label="Feature the Fauget burger"
+                        aria-pressed="true"
+                    >
+                        <img src=".//Firefly (1).png" alt="Fauget burger" loading="eager" draggable="false">
+                    </button>
+
+                    <button
+                        type="button"
+                        class="fauget-food-slide"
+                        data-food-index="1"
+                        data-position="right"
+                        onclick="setFoodSpotlight(1)"
+                        aria-label="Feature the Fauget pizza"
+                        aria-pressed="false"
+                    >
+                        <img src=".//Firefly (16).png" alt="Fauget pizza" loading="eager" draggable="false">
+                    </button>
+
+                    <button
+                        type="button"
+                        class="fauget-food-slide"
+                        data-food-index="2"
+                        data-position="left"
+                        onclick="setFoodSpotlight(2)"
+                        aria-label="Feature the Fauget milkshake"
+                        aria-pressed="false"
+                    >
+                        <img src=".//Firefly (18).png" alt="Fauget milkshake" loading="eager" draggable="false">
+                    </button>
+
+                    <div class="fauget-food-pagination" aria-label="Choose featured food">
+                        <button type="button" class="is-active" onclick="setFoodSpotlight(0)" aria-label="Show burger" aria-current="true"></button>
+                        <button type="button" onclick="setFoodSpotlight(1)" aria-label="Show pizza" aria-current="false"></button>
+                        <button type="button" onclick="setFoodSpotlight(2)" aria-label="Show milkshake" aria-current="false"></button>
+                    </div>
+                </div>
+
+                <div class="fauget-process-copy">
+                    <h3>Pick it.</h3>
+
+                    <p>
+                        Choose your burger, pizza or shake from the menu
+                        and build your order.
+                    </p>
+                </div>
+
+            </article>
+
+            <!-- DIVIDER -->
+            <div class="fauget-process-divider"></div>
+
+            <!-- =======================
+                 STEP 2
+                 ======================= -->
+            <article class="fauget-process-step">
+
+                <div class="fauget-process-step-number">
+                    02 · FRESH FROM THE KITCHEN
+                </div>
+
+                <div class="fauget-process-image-wrap">
+                    <img
+                        src="Firefly (8).png"
+                        alt="Fauget chef preparing pizza"
+                        class="fauget-process-image"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="fauget-process-copy">
+                    <h3>We cook it.</h3>
+
+                    <p>
+                        Your order is prepared fresh with care before
+                        it leaves the kitchen.
+                    </p>
+                </div>
+
+            </article>
+
+            <!-- DIVIDER -->
+            <div class="fauget-process-divider"></div>
+
+            <!-- =======================
+                 STEP 3
+                 ======================= -->
+            <article class="fauget-process-step">
+
+                <div class="fauget-process-step-number">
+                    03 · ON THE WAY TO YOU
+                </div>
+
+                <div class="fauget-process-image-wrap">
+                    <img
+                        src=".//Firefly (12).png"
+                        alt="Fauget delivery person bringing food"
+                        class="fauget-process-image"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="fauget-process-copy">
+                    <h3>We bring it.</h3>
+
+                    <p>
+                        We get your food moving and bring it hot
+                        straight to your doorstep.
+                    </p>
+                </div>
+
+            </article>
+
+        </div>
+    </div>
+</section>
+
+    <!-- ========================================================= -->
+    <!-- REVIEWS: large editorial quote -->
+    <!-- ========================================================= -->
+    <section id="reviews" class="fauget-reviews-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fauget-reviews-top">
+                <div>
+                    <p class="fauget-section-kicker">WHAT PEOPLE SAY</p>
+                    <h2>Good food travels fast.</h2>
+                </div>
+                <div class="fauget-rating-lockup">
+                    <div class="fauget-stars" aria-label="5 stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <strong>4.9 / 5</strong>
+                    <span>2,500+ orders served</span>
+                </div>
+            </div>
+
+            <div class="fauget-featured-quote">
+                <div class="fauget-quote-mark">“</div>
+                <blockquote>Fauget burger is literally the best burger I've had in town. Delivered hot to my hostel room in less than 25 minutes.</blockquote>
+                <div class="fauget-quote-meta"><span>Tunde Bakare</span><small>University Student</small></div>
+            </div>
+
+            <div class="fauget-mini-reviews">
+                <article><i class="fa-solid fa-quote-left"></i><p>“The pizza crust is so crispy and flavorful, and the strawberry shake was super rich.”</p><strong>Chioma Okonkwo</strong></article>
+                <article><i class="fa-solid fa-quote-left"></i><p>“Fast ordering, good portions, proper comfort food. I keep coming back.”</p><strong>Latest customer</strong></article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- CONTACT / PARTNERSHIPS -->
+    <!-- ========================================================= -->
+    <section id="ceo-contact" class="fauget-contact-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="fauget-contact-grid">
+                <div>
+                    <p class="fauget-section-kicker">EXECUTIVE & PARTNERSHIPS</p>
+                    <h2>There’s more to Fauget than the menu.</h2>
+                    <p>For franchise conversations, strategic partnerships and business enquiries, talk to the Fauget team directly.</p>
+                </div>
+                <div class="fauget-contact-actions">
+                    <button onclick="contactCEO()" class="fauget-btn fauget-btn-dark"><i class="fa-brands fa-whatsapp"></i><span>Contact the CEO</span></button>
+                    <a href="#about" onclick="showView('about')" class="fauget-btn fauget-btn-outline-dark"><span>Read our story</span><i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 1.5: DEDICATED WHY FAUGET PAGE                       -->
+        <!-- ========================================================= -->
+        <div id="view-why" class="view-panel hidden transition-opacity duration-300">
+            
+            <!-- Page Header -->
+            <section class="pt-16 pb-12 border-b border-fauget-softCream/10 relative overflow-hidden">
+                <!-- Subtle Background Gradient -->
+                <div class="absolute inset-0 bg-gradient-to-b from-fauget-secondary/60 to-transparent pointer-events-none -z-10"></div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                    <span class="inline-block px-3 py-1 rounded-full bg-fauget-orange/10 border border-fauget-orange/20 text-fauget-orange font-semibold text-xs tracking-widest uppercase mb-4">
+                        The Fauget Difference
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-fauget-cream">Why Customers Love Us</h1>
+                    <p class="text-fauget-cream/70 text-base mt-6 max-w-2xl mx-auto font-light leading-relaxed">
+                        We don't just prepare fast food; we craft memorable meals designed for quick convenience, rich flavor, and absolute satisfaction. Discover the pillars of our service that set us apart.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Features Grid Section -->
+            <section class="py-16 relative bg-fauget-dark">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Editorial Asymmetric Grid Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Feature Card 1 -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">Lightning Fast Delivery</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Hot food shouldn't arrive cold. Our streamlined dispatch system ensures your meals leave the kitchen and reach your doorstep in record time.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>Averaging 25 mins delivery</span>
+                            </div>
+                        </div>
+
+                        <!-- Feature Card 2 -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-utensils"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">Uncompromising Taste</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Made with premium ingredients, signature spices, and freshly baked buns every morning. Taste the perfection in every single bite.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>Chef-crafted recipes</span>
+                            </div>
+                        </div>
+
+                        <!-- Feature Card 3 -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">Student-Friendly Value</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Great taste shouldn't break the bank. Generous portions, combo packages, and pocket-friendly pricing tailored for students and families.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>Maximum food, better value</span>
+                            </div>
+                        </div>
+
+                        <!-- Feature Card 4 -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-pump-medical"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">Guaranteed Cleanliness</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Prepared in state-of-the-art hygienic kitchens following strict health and sanitation standards for absolute peace of mind.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>100% Hygiene Certified</span>
+                            </div>
+                        </div>
+
+                        <!-- Feature Card 5: Drone Delivery Concept -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-plane-fly"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">Drone Delivery Ready</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Pioneering next-generation food logistics. We are testing autonomous air delivery hubs to make student drop-offs faster than ever.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>Next-Gen Logistics</span>
+                            </div>
+                        </div>
+
+                        <!-- Feature Card 6: 24/7 AI Service -->
+                        <div class="glass-card glass-card-hover rounded-2xl p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-fauget-orange/15 border border-fauget-orange/30 flex items-center justify-center text-fauget-orange text-2xl mb-6">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-fauget-cream mb-3">24/7 AI Service</h3>
+                                <p class="text-fauget-cream/70 text-sm leading-relaxed">
+                                    Craving midnight snacks or early morning breakfast? Our smart ordering system operates around the clock to take your order instantly.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-fauget-softCream/10 flex items-center text-fauget-gold text-xs font-semibold">
+                                <span>Always On, Never Closes</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="mt-16 text-center">
+                        <a href="#order" onclick="showView('order')" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-fauget-caramel to-fauget-orange text-white font-bold text-base shadow-xl hover:scale-105 active:scale-95 transition-all">
+                            <span>Experience It Yourself</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 2: DEDICATED ORDER PAGE (order.html equivalent)     -->
+        <!-- ========================================================= -->
+        <div id="view-order" class="view-panel hidden transition-opacity duration-300">
+            <section class="py-10 lg:py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Back Button & Header Bar -->
+                    <div class="flex items-center justify-between mb-8 pb-6 border-b border-fauget-softCream/10">
+                        <button onclick="showView('home')" class="inline-flex items-center gap-2 text-sm text-fauget-cream/80 hover:text-fauget-orange transition-colors">
+                            <i class="fa-solid fa-arrow-left text-xs"></i>
+                            <span>Back to Home</span>
+                        </button>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-fauget-gold">Kitchen Open for Delivery</span>
+                        </div>
+                    </div>
+
+                    <!-- Page Header Banner -->
+                    <div class="text-center max-w-2xl mx-auto mb-12">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-fauget-cream">FAUGET MENU</h1>
+                        <p class="text-fauget-orange font-semibold text-lg mt-1">What are you craving today?</p>
+                        <p class="text-fauget-cream/70 text-sm mt-3 font-light">
+                            Choose your meal, tell us where to bring it, and send your order directly to Fauget on WhatsApp.
+                        </p>
+                    </div>
+
+                    <!-- ORDERING SYSTEM GRID: Menu Left, Cart Summary Right -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <!-- PRODUCTS CATALOG (8 cols) -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <h2 class="text-xl font-bold text-fauget-cream mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-fauget-orange"></i>
+                                <span>Signature Meals</span>
+                            </h2>
+
+                            <!-- Products Container rendered by JS / Static fallback -->
+                            <div id="catalog-products-list" class="space-y-6">
+                                <!-- Rendered dynamically by script.js -->
+                            </div>
+                        </div>
+
+                        <!-- ORDER SUMMARY & CART PANEL (5 cols) -->
+                        <div class="lg:col-span-5 sticky top-24">
+                            <div class="glass-card rounded-2xl p-6 border border-fauget-orange/20 shadow-2xl space-y-6">
+                                
+                                <div class="flex items-center justify-between pb-4 border-b border-fauget-softCream/10">
+                                    <h3 class="text-lg font-bold text-fauget-cream flex items-center gap-2">
+                                        <i class="fa-solid fa-bag-shopping text-fauget-orange"></i>
+                                        <span>Your Order Summary</span>
+                                    </h3>
+                                    <span id="cart-count-badge" class="px-2.5 py-0.5 rounded-full bg-fauget-orange text-white text-xs font-bold">0 Items</span>
+                                </div>
+
+                                <!-- Cart Items List -->
+                                <div id="cart-items-container" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                                    <p class="text-fauget-muted text-xs text-center py-8 italic">Your cart is empty. Pick a meal from the menu to start!</p>
+                                </div>
+
+                                <!-- Subtotal & Total -->
+                                <div class="pt-4 border-t border-fauget-softCream/10 space-y-2">
+                                    <div class="flex justify-between text-xs text-fauget-cream/70">
+                                        <span>Subtotal</span>
+                                        <span id="cart-subtotal">₦0</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-fauget-cream/70">
+                                        <span>Estimated Delivery</span>
+                                        <span class="text-fauget-gold font-medium">Free / Standard Rate</span>
+                                    </div>
+                                    <div class="flex justify-between text-base font-bold text-fauget-cream pt-2 border-t border-fauget-softCream/10">
+                                        <span>Total Amount</span>
+                                        <span id="cart-total" class="text-fauget-orange text-lg">₦0</span>
+                                    </div>
+                                </div>
+
+                                <!-- CUSTOMER DETAILS FORM -->
+                                <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-4 pt-2">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-fauget-cream mb-1">Full Name *</label>
+                                        <input type="text" id="cust-name" required placeholder="e.g., Tunde Bakare" class="w-full px-4 py-2.5 rounded-xl bg-fauget-dark border border-fauget-softCream/20 text-fauget-cream text-sm focus:outline-none focus:border-fauget-orange transition-colors">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-fauget-cream mb-1">Phone Number *</label>
+                                        <input type="tel" id="cust-phone" required placeholder="e.g., 08012345678" class="w-full px-4 py-2.5 rounded-xl bg-fauget-dark border border-fauget-softCream/20 text-fauget-cream text-sm focus:outline-none focus:border-fauget-orange transition-colors">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-fauget-cream mb-1">Delivery Location / Hostel *</label>
+                                        <input type="text" id="cust-location" required placeholder="e.g., Hall 2, Room 104 / Street Address" class="w-full px-4 py-2.5 rounded-xl bg-fauget-dark border border-fauget-softCream/20 text-fauget-cream text-sm focus:outline-none focus:border-fauget-orange transition-colors">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-fauget-cream mb-1">Special Instructions (Optional)</label>
+                                        <textarea id="cust-note" rows="2" placeholder="e.g., Extra ketchup, call when nearby..." class="w-full px-4 py-2.5 rounded-xl bg-fauget-dark border border-fauget-softCream/20 text-fauget-cream text-sm focus:outline-none focus:border-fauget-orange transition-colors"></textarea>
+                                    </div>
+
+                                    <!-- WHATSAPP SUBMIT BUTTON -->
+                                    <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-600 to-emerald-500 text-white font-bold text-base shadow-xl shadow-green-600/20 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3 mt-4">
+                                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                                        <span>Send My Order on WhatsApp</span>
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 3: SEPARATE ABOUT PAGE (about.html equivalent)      -->
+        <!-- ========================================================= -->
+        <div id="view-about" class="view-panel hidden transition-opacity duration-300">
+            <section class="py-12 lg:py-20">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                    
+                    <!-- Header -->
+                    <div class="text-center max-w-3xl mx-auto">
+                        <span class="text-fauget-gold font-bold text-xs tracking-widest uppercase">Since 2002</span>
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-fauget-cream mt-2">The Fauget Vision</h1>
+                        <p class="text-fauget-cream/70 text-base sm:text-lg mt-4 font-light leading-relaxed">
+                            Crafting quick, convenient, high-quality meals for students, families, busy workers, and food enthusiasts across Nigeria.
+                        </p>
+                    </div>
+
+                    <!-- Story Grid -->
+                    <div class="glass-card rounded-3xl p-8 sm:p-12 border border-fauget-softCream/10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4">
+                            <h2 class="text-2xl font-bold text-fauget-cream">Built For Convenience & Great Taste</h2>
+                            <p class="text-fauget-cream/80 text-sm leading-relaxed">
+                                Founded with a commitment to culinary excellence and fast delivery, Fauget has evolved into a premier quick-service food brand specializing in flame-grilled burgers, hand-crafted pizzas, and rich creamy milkshakes.
+                            </p>
+                            <p class="text-fauget-cream/80 text-sm leading-relaxed">
+                                Our mission is simple: eliminate long waiting times without compromising on hygiene, flavor, or freshness. Whether you are studying late at night or relaxing with family, Fauget brings happiness right to your table.
+                            </p>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="w-64 h-64 rounded-2xl bg-fauget-secondary border-2 border-fauget-orange/30 p-4 flex flex-col items-center justify-center text-center shadow-2xl">
+                                <img src=".//Firefly_RemoveBackground.png" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23D36A2E\'/><text x=\'50\' y=\'55\' font-family=\'Sora\' font-size=\'16\' fill=\'%23FFF5E8\' text-anchor=\'middle\'>FAUGET</text></svg>'" alt="Fauget Badge" class="w-24 h-24 object-contain mb-4">
+                                <span class="font-heading text-lg font-bold text-fauget-cream">FAUGET BRAND</span>
+                                <span class="text-xs text-fauget-gold">Official Food Partner</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Brand Pillars -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="glass-card p-6 rounded-2xl text-center space-y-2">
+                            <i class="fa-solid fa-burger text-3xl text-fauget-orange mb-2"></i>
+                            <h3 class="text-lg font-bold text-fauget-cream">Signature Recipes</h3>
+                            <p class="text-xs text-fauget-cream/70">Proprietary spice blends and dough techniques crafted to perfection.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl text-center space-y-2">
+                            <i class="fa-solid fa-stopwatch text-3xl text-fauget-orange mb-2"></i>
+                            <h3 class="text-lg font-bold text-fauget-cream">Rapid Dispatch</h3>
+                            <p class="text-xs text-fauget-cream/70">Optimized kitchen workflows to get your food moving within minutes.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl text-center space-y-2">
+                            <i class="fa-solid fa-microchip text-3xl text-fauget-orange mb-2"></i>
+                            <h3 class="text-lg font-bold text-fauget-cream">Simple, Reliable Service</h3>
+                            <p class="text-xs text-fauget-cream/70">Simple ordering, reliable delivery, and a better way to enjoy your favorite meals.</p>
+                        </div>
+                    </div>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+                        <a href="#order" onclick="showView('order')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-fauget-caramel to-fauget-orange text-white font-bold text-base shadow-xl text-center">
+                            Order Your Meal Now
+                        </a>
+                        <button onclick="contactCEO()" class="w-full sm:w-auto px-8 py-4 rounded-full bg-fauget-secondary border border-fauget-softCream/20 text-fauget-cream font-semibold text-base hover:border-fauget-gold text-center">
+                            Contact the CEO
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="bg-fauget-secondary border-t border-fauget-softCream/10 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-fauget-softCream/10">
+                
+                <!-- Brand Column -->
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full border border-fauget-orange bg-fauget-dark p-1 flex items-center justify-center">
+                            <img src="images/logo.png" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23D36A2E\'/></svg>'" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                        <span class="font-heading font-extrabold text-xl text-fauget-cream">FAUGET</span>
+                    </div>
+                    <p class="text-fauget-cream/70 text-xs leading-relaxed">
+                        Good Food. Great Mood. Delivered. Serving fresh burgers, gourmet pizza, and creamy milkshakes.
+                    </p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-fauget-gold uppercase tracking-wider mb-3">Quick Links</h4>
+                    <ul class="space-y-2 text-xs text-fauget-cream/80">
+                        <li><a href="#home" onclick="showView('home')" class="hover:text-fauget-orange transition-colors">Home</a></li>
+                        <li><a href="#order" onclick="showView('order')" class="hover:text-fauget-orange transition-colors">Menu / Order</a></li>
+                        <li><a href="#why" onclick="showView('why')" class="hover:text-fauget-orange transition-colors">Why Fauget</a></li>
+                        <li><a href="#about" onclick="showView('about')" class="hover:text-fauget-orange transition-colors">About Fauget</a></li>
+                    </ul>
+                </div>
+
+                <!-- Editable Contact Placeholders -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold text-fauget-gold uppercase tracking-wider mb-3">Contact Info</h4>
+                    <ul class="space-y-2 text-xs text-fauget-cream/80">
+                        <li><i class="fa-brands fa-whatsapp text-fauget-orange mr-2"></i> [WHATSAPP NUMBER]</li>
+                        <li><i class="fa-solid fa-phone text-fauget-orange mr-2"></i> [PHONE NUMBER]</li>
+                        <li><i class="fa-solid fa-location-dot text-fauget-orange mr-2"></i> [ADDRESS PLACEHOLDER]</li>
+                        <li><i class="fa-solid fa-clock text-fauget-orange mr-2"></i> 24/7 AI Service & Delivery</li>
+                    </ul>
+                </div>
+
+                <!-- Socials & CEO CTA -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-fauget-gold uppercase tracking-wider mb-3">Connect With Us</h4>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-fauget-dark flex items-center justify-center text-fauget-cream hover:text-fauget-orange hover:border hover:border-fauget-orange text-xs"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-fauget-dark flex items-center justify-center text-fauget-cream hover:text-fauget-orange hover:border hover:border-fauget-orange text-xs"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-fauget-dark flex items-center justify-center text-fauget-cream hover:text-fauget-orange hover:border hover:border-fauget-orange text-xs"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                    <button onclick="contactCEO()" class="mt-2 w-full py-2 px-4 rounded-xl bg-fauget-dark border border-fauget-gold/40 text-fauget-gold text-xs font-bold hover:bg-fauget-gold hover:text-fauget-dark transition-all">
+                        Executive Desk / Contact CEO
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="pt-8 text-center text-xs text-fauget-muted flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; 2026 FAUGET Food Brand. All rights reserved.</p>
+                <p>Designed for Speed, Convenience & Taste.</p>
+            </div>
+        </div>
+    </footer>
+
+<!-- Accessible add-to-order confirmation toast -->
+<div id="fauget-add-toast" class="fauget-add-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+    <div class="fauget-toast-check" aria-hidden="true"><i class="fa-solid fa-check"></i></div>
+    <div class="fauget-toast-copy">
+        <p class="fauget-toast-title" data-toast-title>Added to your order</p>
+        <p class="fauget-toast-message" data-toast-message>Thank you for your order.</p>
+        <p class="fauget-toast-hint" data-toast-hint>Scroll down to see your order.</p>
+    </div>
+    <button type="button" class="fauget-toast-view" onclick="jumpToOrderSummary()">View order <i class="fa-solid fa-arrow-down"></i></button>
+</div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        /* =========================================================
+           FAUGET CONFIGURATION VARIABLES
+           Edit these variables with your actual operational details.
+           ========================================================= */
+        const FAUGET_WHATSAPP = "2348059208577";     // Customer Order WhatsApp Number (International format without +)
+        const FAUGET_CEO_WHATSAPP = "2348000000000"; // CEO Contact WhatsApp Number
+
+        /* Products Catalog Configuration */
+        const catalogProducts = [
+            {
+                id: 'burger',
+                name: 'Signature Fauget Burger',
+                category: 'Burger',
+                price: 3500,
+                description: 'Juicy flame-grilled beef patty, melted cheddar cheese, fresh crisp lettuce, ripe tomatoes & secret Fauget house sauce inside a warm toasted sesame bun.',
+                image: './/Firefly (3).png',
+                fallbackSvg: "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 150%22><rect x=%2220%22 y=%2230%22 width=%22160%22 height=%2240%22 rx=%2220%22 fill=%22%23B86F43%22/><rect x=%2225%22 y=%2275%22 width=%22150%22 height=%2215%22 fill=%22%23D36A2E%22/><rect x=%2220%22 y=%2295%22 width=%22160%22 height=%2230%22 rx=%2210%22 fill=%22%238F4F2E%22/></svg>",
+                label: 'Signature Burger',
+                scale: 'var(--burger-scale)'
+            },
+            {
+                id: 'pizza',
+                name: 'Signature Fauget Pizza',
+                category: 'Pizza',
+                price: 6500,
+                description: 'Hand-tossed golden crust topped with rich basil tomato marinara, melted mozzarella cheese, savory pepperoni, bell peppers, and gourmet herbs.',
+                image: './/Firefly (1).png',
+                fallbackSvg: "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><circle cx=%22100%22 cy=%22100%22 r=%2290%22 fill=%22%23B86F43%22/><circle cx=%22100%22 cy=%22100%22 r=%2275%22 fill=%22%23D36A2E%22/><circle cx=%2270%22 cy=%2270%22 r=%2212%22 fill=%22%238F4F2E%22/><circle cx=%22130%22 cy=%22110%22 r=%2212%22 fill=%22%238F4F2E%22/></svg>",
+                label: 'Signature Pizza',
+                scale: 'var(--pizza-scale)'
+            },
+            {
+                id: 'milkshake',
+                name: 'Signature Creamy Milkshake',
+                category: 'Milkshake',
+                price: 2200,
+                description: 'Decadent strawberry-vanilla ice cream blend topped with whipped cream, festive sprinkles, and a sweet maraschino cherry.',
+                image: './/Firefly (2).png',
+                fallbackSvg: "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 220%22><rect x=%2225%22 y=%2250%22 width=%2270%22 height=%22140%22 rx=%2215%22 fill=%22%23F2C65A%22/><circle cx=%2260%22 cy=%2245%22 r=%2225%22 fill=%22%23FFF5E8%22/><rect x=%2258%22 y=%2210%22 width=%226%22 height=%2250%22 fill=%22%23D36A2E%22/></svg>",
+                label: 'Signature Milkshake',
+                scale: 'var(--milkshake-scale)'
+            }
+        ];
+
+        /* Application State */
+        let currentHeroIndex = 2; // Starts with Milkshake
+        let heroTimer = null;
+        let heroTypingTimer = null;
+        let heroTypingPhraseIndex = 0;
+        let heroTransitionToken = 0;
+        let cart = [];
+
+        /* =========================================================
+           VIEW SWITCHER (SPA ROUTER)
+           ========================================================= */
+        function showView(viewId) {
+            const views = ['home', 'order', 'about', 'why'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) {
+                    if (v === viewId) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Active Nav Links Styling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const target = link.getAttribute('data-target');
+                if (target === viewId) {
+                    link.classList.add('text-fauget-orange', 'font-semibold');
+                    link.classList.remove('text-fauget-cream/80');
+                } else {
+                    link.classList.remove('text-fauget-orange', 'font-semibold');
+                    link.classList.add('text-fauget-cream/80');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToSection(sectionId) {
+            setTimeout(() => {
+                const sec = document.getElementById(sectionId);
+                if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('hidden');
+            }
+        }
+
+        /* =========================================================
+           HERO PRODUCT ROTATOR LOGIC
+           ========================================================= */
+        function updateHeroControls(index) {
+            const dots = document.querySelectorAll('.hero-dot');
+            const thumbs = document.querySelectorAll('.hero-thumb');
+            const productTabs = document.querySelectorAll('.fauget-product-tab');
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.className = "hero-dot w-6 h-2 rounded-full bg-fauget-orange transition-all duration-300";
+                } else {
+                    dot.className = "hero-dot w-2 h-2 rounded-full bg-white/30 hover:bg-white/60 transition-all duration-300";
+                }
+            });
+
+            thumbs.forEach((thumb, i) => {
+                if (i === index) {
+                    thumb.classList.add('ring-2', 'ring-fauget-orange', 'scale-105');
+                } else {
+                    thumb.classList.remove('ring-2', 'ring-fauget-orange', 'scale-105');
+                }
+            });
+            productTabs.forEach((tab, i) => {
+                tab.classList.toggle('is-active', i === index);
+            });
+        }
+
+        function preloadHeroImage(prod) {
+            return new Promise((resolve) => {
+                const probe = new Image();
+                probe.decoding = 'async';
+                probe.onload = () => resolve(prod.image);
+                probe.onerror = () => resolve(prod.fallbackSvg);
+                probe.src = prod.image;
+            });
+        }
+
+        async function setHeroProduct(index, options = {}) {
+            const { restartTimer = true } = options;
+            const img = document.getElementById('hero-product-img');
+            const label = document.getElementById('hero-product-label');
+            if (!img || !catalogProducts[index]) return;
+
+            const safeIndex = (index + catalogProducts.length) % catalogProducts.length;
+            const prod = catalogProducts[safeIndex];
+            const token = ++heroTransitionToken;
+
+            currentHeroIndex = safeIndex;
+            updateHeroControls(safeIndex);
+            if (label) label.textContent = prod.label;
+            if (restartTimer) resetHeroTimer();
+
+            img.classList.add('switching');
+
+            const source = await preloadHeroImage(prod);
+            if (token !== heroTransitionToken) return;
+
+            img.style.setProperty('--product-scale', prod.scale);
+            img.alt = prod.name;
+            img.src = source;
+
+            // Let the browser paint the new image before fading it back in.
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (token === heroTransitionToken) {
+                        img.classList.remove('switching');
+                    }
+                });
+            });
+        }
+
+        function nextHeroProduct() {
+            setHeroProduct((currentHeroIndex + 1) % catalogProducts.length, { restartTimer: true });
+        }
+
+        function prevHeroProduct() {
+            setHeroProduct((currentHeroIndex - 1 + catalogProducts.length) % catalogProducts.length, { restartTimer: true });
+        }
+
+        function startHeroTimer() {
+            if (heroTimer) clearInterval(heroTimer);
+            heroTimer = setInterval(() => {
+                if (!document.hidden) nextHeroProduct();
+            }, 4200);
+        }
+
+        function resetHeroTimer() {
+            startHeroTimer();
+        }
+
+        function startHeroTyping() {
+            const textEl = document.getElementById('hero-typing-text');
+            if (!textEl) return;
+
+            const phrases = ['Delivered.', 'Fast.', 'To Your Door Step.'];
+            const typeSpeed = 92;
+            const deleteSpeed = 55;
+            const pauseAfterType = 1100;
+            const pauseAfterDelete = 260;
+            let charIndex = 0;
+            let deleting = false;
+
+            if (heroTypingTimer) clearTimeout(heroTypingTimer);
+
+            const tick = () => {
+                const phrase = phrases[heroTypingPhraseIndex];
+
+                if (!deleting) {
+                    charIndex += 1;
+                    textEl.textContent = phrase.slice(0, charIndex);
+
+                    if (charIndex === phrase.length) {
+                        deleting = true;
+                        heroTypingTimer = setTimeout(tick, pauseAfterType);
+                        return;
+                    }
+
+                    heroTypingTimer = setTimeout(tick, typeSpeed);
+                    return;
+                }
+
+                charIndex -= 1;
+                textEl.textContent = phrase.slice(0, charIndex);
+
+                if (charIndex === 0) {
+                    deleting = false;
+                    heroTypingPhraseIndex = (heroTypingPhraseIndex + 1) % phrases.length;
+                    heroTypingTimer = setTimeout(tick, pauseAfterDelete);
+                    return;
+                }
+
+                heroTypingTimer = setTimeout(tick, deleteSpeed);
+            };
+
+            textEl.textContent = '';
+            tick();
+        }
+
+        /* =========================================================
+           HOW-IT-WORKS FOOD SPOTLIGHT CAROUSEL
+           Rotates burger -> pizza -> milkshake, with the active image
+           large in the middle and the other two as smaller side previews.
+           ========================================================= */
+        let currentFoodSpotlight = 0;
+        let foodSpotlightTimer = null;
+        let foodSpotlightIsVisible = false;
+
+        function stopFoodSpotlightTimer() {
+            if (foodSpotlightTimer) {
+                clearInterval(foodSpotlightTimer);
+                foodSpotlightTimer = null;
+            }
+        }
+
+        function refreshFoodSpotlightTimer() {
+            stopFoodSpotlightTimer();
+
+            const stage = document.getElementById('fauget-food-stage');
+            const finePointerCanHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+            if (!stage || !foodSpotlightIsVisible || document.hidden || (finePointerCanHover && stage.matches(':hover'))) return;
+
+            // Honour the visitor's reduced-motion preference: manual controls still work.
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            foodSpotlightTimer = setInterval(() => {
+                if (!document.hidden) {
+                    setFoodSpotlight((currentFoodSpotlight + 1) % 3, { restartTimer: false });
+                }
+            }, 3300);
+        }
+
+        function setFoodSpotlight(index, options = {}) {
+            const stage = document.getElementById('fauget-food-stage');
+            if (!stage) return;
+
+            const slides = Array.from(stage.querySelectorAll('.fauget-food-slide'));
+            const dots = Array.from(stage.querySelectorAll('.fauget-food-pagination button'));
+            if (slides.length !== 3) return;
+
+            currentFoodSpotlight = ((Number(index) % slides.length) + slides.length) % slides.length;
+            const previousIndex = (currentFoodSpotlight + slides.length - 1) % slides.length;
+            const nextIndex = (currentFoodSpotlight + 1) % slides.length;
+
+            slides.forEach((slide) => {
+                const itemIndex = Number(slide.dataset.foodIndex);
+                let position = 'right';
+                if (itemIndex === currentFoodSpotlight) position = 'center';
+                else if (itemIndex === previousIndex) position = 'left';
+
+                slide.dataset.position = position;
+                slide.setAttribute('aria-pressed', itemIndex === currentFoodSpotlight ? 'true' : 'false');
+            });
+
+            dots.forEach((dot, dotIndex) => {
+                const active = dotIndex === currentFoodSpotlight;
+                dot.classList.toggle('is-active', active);
+                dot.setAttribute('aria-current', active ? 'true' : 'false');
+            });
+
+            if (options.restartTimer !== false) refreshFoodSpotlightTimer();
+        }
+
+        function setupFoodSpotlightCarousel() {
+            const stage = document.getElementById('fauget-food-stage');
+            if (!stage) return;
+
+            setFoodSpotlight(0, { restartTimer: false });
+
+            stage.addEventListener('mouseenter', stopFoodSpotlightTimer);
+            stage.addEventListener('mouseleave', refreshFoodSpotlightTimer);
+            stage.addEventListener('touchstart', stopFoodSpotlightTimer, { passive: true });
+            stage.addEventListener('touchend', () => {
+                // Resume after a short touch pause so mobile visitors can tap a side image.
+                window.setTimeout(refreshFoodSpotlightTimer, 900);
+            }, { passive: true });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) stopFoodSpotlightTimer();
+                else refreshFoodSpotlightTimer();
+            });
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    foodSpotlightIsVisible = Boolean(entries[0] && entries[0].isIntersecting);
+                    refreshFoodSpotlightTimer();
+                }, { threshold: 0.25 });
+                observer.observe(stage);
+            } else {
+                foodSpotlightIsVisible = true;
+                refreshFoodSpotlightTimer();
+            }
+        }
+
+
+
+        /* =========================================================
+           ADD-TO-ORDER FEEDBACK + VIDEO READY STATE
+           ========================================================= */
+        let faugetToastTimer = null;
+
+        function showAddToOrderToast(product, quantity) {
+            const toast = document.getElementById('fauget-add-toast');
+            if (!toast || !product) return;
+
+            const title = toast.querySelector('[data-toast-title]');
+            const message = toast.querySelector('[data-toast-message]');
+            const hint = toast.querySelector('[data-toast-hint]');
+            const category = String(product.category || product.name || 'item').toLowerCase();
+            const articleByCategory = {
+                burger: 'a burger',
+                pizza: 'a pizza',
+                milkshake: 'a milkshake'
+            };
+            const foodPhrase = articleByCategory[category] || `the ${category}`;
+            const quantityLabel = quantity > 1 ? `${quantity} × ` : '';
+
+            if (title) title.textContent = `${quantityLabel}${product.name} added`;
+            if (message) message.textContent = `Thank you for ordering ${foodPhrase}.`;
+            if (hint) hint.textContent = 'Scroll down to see your order.';
+
+            toast.hidden = false;
+            // Ensure the browser registers the initial hidden state before animating in.
+            window.requestAnimationFrame(() => toast.classList.add('is-visible'));
+            window.clearTimeout(faugetToastTimer);
+            faugetToastTimer = window.setTimeout(() => {
+                toast.classList.remove('is-visible');
+                window.setTimeout(() => {
+                    if (!toast.classList.contains('is-visible')) toast.hidden = true;
+                }, 260);
+            }, 5200);
+        }
+
+        function jumpToOrderSummary() {
+            const target = document.getElementById('cart-items-container');
+            if (!target) return;
+
+            // Scroll the customer directly to the cart summary after they add an item.
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.remove('fauget-cart-focus');
+            void target.offsetWidth;
+            target.classList.add('fauget-cart-focus');
+            window.setTimeout(() => target.classList.remove('fauget-cart-focus'), 1450);
+
+            const toast = document.getElementById('fauget-add-toast');
+            if (toast) {
+                toast.classList.remove('is-visible');
+                window.setTimeout(() => { if (!toast.classList.contains('is-visible')) toast.hidden = true; }, 260);
+            }
+        }
+
+        function setupFaugetFoodFilm() {
+            const frame = document.getElementById('fauget-food-film-frame');
+            const video = document.getElementById('fauget-food-film-video');
+            if (!frame || !video) return;
+
+            // CSS 3D preview stays visible until you add a real video source.
+            const sourceTag = video.querySelector('source[src]');
+            const hasSource = Boolean((video.getAttribute('src') || '').trim() || (sourceTag && sourceTag.getAttribute('src').trim()));
+            if (!hasSource) return;
+
+            frame.classList.add('has-video');
+            video.muted = true;
+            video.defaultMuted = true;
+            video.loop = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {
+                    // Some browsers wait for a user gesture; the muted video remains available.
+                });
+            }
+        }
+
+
+        /* =========================================================
+           CATALOG & CART FUNCTIONALITY
+           ========================================================= */
+        function renderCatalog() {
+            const container = document.getElementById('catalog-products-list');
+            if (!container) return;
+
+            container.innerHTML = catalogProducts.map(prod => `
+                <div class="glass-card glass-card-hover rounded-2xl p-6 flex flex-col sm:flex-row gap-6 items-center border border-fauget-softCream/10">
+                    <div class="w-32 h-32 shrink-0 flex items-center justify-center p-2 relative bg-fauget-dark/60 rounded-xl">
+                        <img src="${prod.image}" onerror="this.onerror=null; this.src='${prod.fallbackSvg}'" alt="${prod.name}" class="w-full h-full object-contain drop-shadow-md">
+                    </div>
+                    <div class="flex-grow space-y-2 text-center sm:text-left">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                            <h3 class="text-lg font-bold text-fauget-cream">${prod.name}</h3>
+                            <span class="text-fauget-orange font-extrabold text-lg">₦${prod.price.toLocaleString()}</span>
+                        </div>
+                        <p class="text-fauget-cream/70 text-xs leading-relaxed">${prod.description}</p>
+                        <div class="pt-3 flex flex-wrap items-center justify-center sm:justify-between gap-4">
+                            <span class="text-[11px] text-fauget-gold font-medium uppercase tracking-wider"><i class="fa-solid fa-fire text-xs mr-1"></i> Freshly Prepared</span>
+                            <button onclick="addToCart('${prod.id}')" class="px-5 py-2 rounded-full bg-gradient-to-r from-fauget-caramel to-fauget-orange text-white text-xs font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add to Order</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(productId) {
+            const prod = catalogProducts.find(p => p.id === productId);
+            if (!prod) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...prod, quantity: 1 });
+            }
+
+            updateCartUI();
+            const updatedItem = cart.find(item => item.id === productId);
+            showAddToOrderToast(prod, updatedItem ? updatedItem.quantity : 1);
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items-container');
+            const countBadge = document.getElementById('cart-count-badge');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            if (!itemsContainer) return;
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            if (countBadge) countBadge.textContent = `${totalItems} Items`;
+            if (subtotalEl) subtotalEl.textContent = `₦${subtotal.toLocaleString()}`;
+            if (totalEl) totalEl.textContent = `₦${subtotal.toLocaleString()}`;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `<p class="text-fauget-muted text-xs text-center py-8 italic">Your cart is empty. Pick a meal from the menu to start!</p>`;
+                return;
+            }
+
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-fauget-dark/80 border border-fauget-softCream/10 text-xs">
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-fauget-cream">${item.name}</h4>
+                        <span class="text-fauget-gold">₦${(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="updateQuantity('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-fauget-secondary text-fauget-cream hover:bg-fauget-orange flex items-center justify-center font-bold text-xs">-</button>
+                        <span class="font-bold text-fauget-cream px-1">${item.quantity}</span>
+                        <button onclick="updateQuantity('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-fauget-secondary text-fauget-cream hover:bg-fauget-orange flex items-center justify-center font-bold text-xs">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* =========================================================
+           WHATSAPP ORDER GENERATOR
+           ========================================================= */
+        function handleOrderSubmit(event) {
+            event.preventDefault();
+
+            if (cart.length === 0) {
+                alert("Please add at least one item to your order before submitting.");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const location = document.getElementById('cust-location').value.trim();
+            const note = document.getElementById('cust-note').value.trim();
+
+            if (!name || !phone || !location) {
+                alert("Please fill in all required customer details (Name, Phone, and Delivery Location).");
+                return;
+            }
+
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Construct formatted WhatsApp order text
+            let message = `🍔 *NEW FAUGET ORDER*\n`;
+            message += `-------------------------\n`;
+            message += `👤 *Customer Name:* ${name}\n`;
+            message += `📞 *Phone:* ${phone}\n`;
+            message += `📍 *Delivery Location:* ${location}\n`;
+            if (note) message += `📝 *Note:* ${note}\n`;
+            message += `-------------------------\n`;
+            message += `🛒 *ORDERED ITEMS:*\n`;
+
+            cart.forEach(item => {
+                message += `• ${item.name} × ${item.quantity} — ₦${(item.price * item.quantity).toLocaleString()}\n`;
+            });
+
+            message += `-------------------------\n`;
+            message += `💰 *TOTAL AMOUNT:* ₦${totalAmount.toLocaleString()}\n`;
+            message += `-------------------------\n`;
+            message += `Please confirm my order and send estimated delivery time! Thank you.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${FAUGET_WHATSAPP}?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        /* CEO Contact WhatsApp Function */
+        function contactCEO() {
+            const ceoMsg = encodeURIComponent("Hello Fauget, I am interested in learning more about the business and would like to speak with the CEO.");
+            window.open(`https://wa.me/${FAUGET_CEO_WHATSAPP}?text=${ceoMsg}`, '_blank');
+        }
+
+        /* =========================================================
+           APPLICATION INITIALIZATION
+           ========================================================= */
+        window.addEventListener('DOMContentLoaded', () => {
+            setupFoodSpotlightCarousel();
+            setupFaugetFoodFilm();
+
+            // Warm the browser cache so the first auto-switch is smooth.
+            catalogProducts.forEach(prod => {
+                const preload = new Image();
+                preload.src = prod.image;
+            });
+
+            updateHeroControls(currentHeroIndex);
+            setHeroProduct(currentHeroIndex, { restartTimer: false });
+            startHeroTyping();
+            startHeroTimer();
+            renderCatalog();
+            updateCartUI();
+
+            // Hash Routing
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'order', 'about', 'why'].includes(hash)) {
+                showView(hash);
+            }
+
+            const heroVisual = document.getElementById('hero-person-wrapper');
+            if (heroVisual) {
+                heroVisual.addEventListener('mouseenter', () => {
+                    if (heroTimer) clearInterval(heroTimer);
+                });
+                heroVisual.addEventListener('mouseleave', resetHeroTimer);
+            }
+        });
+    </script>
+</body>
+</html>
